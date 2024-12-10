@@ -1,14 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom'; 
-import Cookies from "js-cookie";
-import { jwtDecode }  from "jwt-decode";
 
 const LoginForm = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    // const [username, setUsername] = useState("");
     const [message, setMessage] = useState("");
-    
+
     const navigate = useNavigate();
 
     const loginUser = () => {
@@ -16,22 +13,19 @@ const LoginForm = () => {
             method: 'POST',
             headers: { 'Content-type': 'application/json' },
             body: JSON.stringify({ email, password }),
-            credentials: "include"
+            credentials: "include" // Ensure the cookie is sent with the request
         })
             .then((response) => {
                 if (!response.ok) {
                     throw new Error('Invalid credentials');
                 }
                 return response.json();
-            }).then((data)=>{
-                
-                alert(data)
-                const token = Cookies.get('auth'); 
-                if (!token){
-                    return alert("No token found")
-                }
-                const decode = jwtDecode(token)
-                alert(`Welcome, ${decode.username}`);
+            })
+            .then((data) => {
+                alert(data.message);
+
+                // Since the token is set as an HTTP-only cookie, we won't be able to access it with js-cookie.
+                // You should rely on server-side validation for this token
                 navigate("/"); // Navigate to home after login
             })
             .catch((error) => {
@@ -73,3 +67,4 @@ const LoginForm = () => {
 };
 
 export default LoginForm;
+
