@@ -1,0 +1,48 @@
+body {
+    background-color: beige;
+}
+
+.navbar {
+    position: fixed; /* Makes the navbar float */
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: 10px;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between; /* Spread the logo and lists */
+    align-items: center; /* Center items vertically */
+    background-color: #ffffff1a; 
+    backdrop-filter: blur(10px); 
+    z-index: 1000; /* Ensures it stays above other elements */
+}
+
+
+.navbar-logo h1 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: #000f65;
+}
+
+.navbar-lists,
+.navbar-auth {
+    list-style-type: none;
+    display: flex;
+    gap: 20px;
+    margin: 20px;
+    padding: 0;
+}
+
+
+.navbar-auth li {
+    font-size: 1rem;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.navbar-lists {
+    flex: 1; 
+}
+.navbar-lists li:hover {
+    color: rgb(209, 135, 209); /* Change color on hover */
+}
