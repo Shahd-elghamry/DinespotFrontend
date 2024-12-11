@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import appleIcon from "../photos/apple-icon.png";
+import './Register.css';
 
 const RegistrationForm = () => {
     const [step, setStep] = useState(1) // Once the page loads to the user step 1 happens.
@@ -43,7 +45,7 @@ const RegistrationForm = () => {
                     Normal User
                 </button>
                 <button
-                className="user-type-button"
+                className="userType-button"
                 onClick={()=> handleSelectUserType("owner")}>
                     Restaurant Owner
                 </button>
@@ -95,6 +97,13 @@ const RegistrationForm = () => {
                 <br />
                 <button type="submit">Register</button>
             </form>
+            <div className="registration-icons">
+                        <img
+                            src={appleIcon}
+                            alt="Register with Apple"
+                            className="registration-icon"
+                        />
+                    </div>
             {message && <p>{message}</p>}
         </div>
             )}

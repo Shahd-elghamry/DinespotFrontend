@@ -1,0 +1,98 @@
+.registration-div {
+    text-align: center;
+    padding: 20px;
+}
+
+.select-user-type{
+    margin-top: 100px;
+}
+
+.userType-button{
+    padding: 20px 40px;
+    margin: 20px;
+    font-size: 20px;
+    cursor: pointer;
+    border: 2px solid #001f3f; /* Navy */
+    border-radius: 10px;
+    background-color: #f5f5dc; /* Cream */
+    color: #001f3f; /* Navy */
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.userType-button:hover {
+    background-color: #00509e; /* Brighter Navy */
+    color: #f5f5dc; /* Cream */
+    transform: scale(1.1);
+}
+
+.registration-form {
+    margin: 50px auto;
+    width: 80%;
+    max-width: 400px;
+    padding: 20px;
+    border: 2px solid #001f3f; /* Navy */
+    border-radius: 10px;
+    background-color: #f5f5dc; /* Cream */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.registration-form h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #001f3f;
+}
+
+.registration-form label {
+    display:block;
+    margin: 10px 0 5px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #001f3f; /* Navy */
+}
+
+.registration-form input {
+    padding: 10px;
+    width: auto;
+    margin-bottom: 15px;
+    border: 1px solid #000000;
+    border-radius: 3px;
+}
+
+.registration-form button {
+    width: 75%;
+    padding: 15px;
+    margin-top: 30px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    background-color: #001f3f; /* Navy */
+    color: #f5f5dc; /* Cream */
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.registration-form button:hover {
+    background-color: #174f86; /* Brighter Navy */
+    transform: scale(1.05);
+}
+
+ .registration-icons {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    gap: 20px;
+}
+
+.registration-icon {
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.registration-icon:hover {
+    transform: scale(1.2);
+} 
+ 

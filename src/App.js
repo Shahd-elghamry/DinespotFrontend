@@ -6,6 +6,7 @@ import Contact from './Components/Contact';
 import Restaurant from './Components/Restaurants';
 import LoginForm from './Components/Login';
 import RegistrationForm from './Components/Register';
+import Footer from "./Components/Footer";
 
 function App() {
   return (
@@ -19,8 +20,10 @@ function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/login" element={<LoginForm />} />
             <Route path="/register" element={<RegistrationForm />} />
+            <Route path="*" element={<div>404 - Page Not Found</div>} />
           </Routes>
         </div>
+        <Footer />
       </div>
     </Router>
   );
