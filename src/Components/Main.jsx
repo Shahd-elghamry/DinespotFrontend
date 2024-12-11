@@ -6,6 +6,7 @@ import RegistrationForm from "./Register";
 import Home from "./Home"; 
 import Lists from "./Lists";
 import Contact from "./Contact"; 
+import Restaurant from "./Restaurants";
 
 const Main = () => {
     let [page, setPage] = useState('home'); 

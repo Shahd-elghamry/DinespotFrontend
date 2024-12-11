@@ -1,13 +1,19 @@
 import React, { useState } from "react";
 
 const RegistrationForm = () => {
+    const [step, setStep] = useState(1) // Once the page loads to the user step 1 happens.
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [user_type, setUserType] = useState("regular");  
+    const [user_type, setUserType] = useState("");  
     const [phonenum, setPhonenum] = useState(" ")
     const [message, setMessage] = useState("");
 
+    const handleSelectUserType = (type)=>{
+        setUserType(type);
+        setStep(2);
+    }
+    
     const registerUser = () => {
         fetch('http://127.0.0.1:5005/users/register', {
             method: 'POST',
@@ -25,10 +31,31 @@ const RegistrationForm = () => {
                 setMessage(error.message);
                 alert(error.message);
             })
-    }
+    };
     return (
-        <div>
+        <div className="registration-div">
+            {step === 1 && (
+            <div className="select-user-type">
+                <h1>Choose User Type</h1>
+                <button 
+                className="userType-button"
+                onClick={()=>handleSelectUserType("regular")} >
+                    Normal User
+                </button>
+                <button
+                className="user-type-button"
+                onClick={()=> handleSelectUserType("owner")}>
+                    Restaurant Owner
+                </button>
+            </div>
+            )}
+            {step === 2 && ( 
+                <div className="registration-form">
             <h1>Registration Form</h1>
+            <p> 
+                Registering as:{" "}
+                <strong>{user_type === "regular" ? "Normal User": "Restaurant Owner"}</strong>
+                </p>
             <form
                 onSubmit={(e) => {
                     e.preventDefault(); 
@@ -66,16 +93,11 @@ const RegistrationForm = () => {
                     onChange={(e) => setPhonenum(e.target.value)}
                 />
                 <br />
-                <label>user type</label>
-                <input
-                    type="checkbox"
-                    checked={user_type}
-                    onChange={(e) => setUserType(e.target.checked)}
-                />
-                <br />
                 <button type="submit">Register</button>
             </form>
             {message && <p>{message}</p>}
+        </div>
+            )}
         </div>
     );
 };

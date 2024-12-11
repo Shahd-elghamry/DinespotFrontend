@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom'; 
 
 import './Navbar.css'; 
@@ -8,7 +8,7 @@ const Navbar = () => {
     const [profileMenuVisible, setProfileMenuVisible] = useState(false);
    
     useEffect(() => {
-        // Check if there is a token that is still valid 
+        // Check if there is a token that is still valid / logged 
         const userToken = localStorage.getItem("userToken");
         if (userToken) {
             setIsLoggedIn(true);
@@ -32,14 +32,15 @@ const Navbar = () => {
                 <li><Link to="/Contact">Contact</Link></li>
             </ul>
             <ul className='navbar-auth'>
-            {!isLoggedIn ? ( //conditional (ternary) operator {!something ?(...):(...)}
+            {/* conditional (ternary) operator {!something ?(...):(...)} */}
+            {!isLoggedIn ? (
                     <>
                 <li><Link to="/Login">Login</Link></li>
                 <li><Link to="/Register">Register</Link></li>
                 </>
             ) : (
                 <li className="profile-icon" onClick={() => setProfileMenuVisible(!profileMenuVisible)}>
-                <img src="profile-icon.png" alt="Profile" className="profile-img" />
+                <img src="./photos/profile-icon.png" alt="Profile" className="profile-img" />
                 {profileMenuVisible && (
                     <div className="profile-menu">
                         <Link to="/Profile">View Profile</Link>

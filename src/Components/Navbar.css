@@ -27,25 +27,6 @@ body {
     animation: fadeIn 2s ease-in-out;
 }
 
-.animated-logo {
-    font-size: 2rem;
-    font-family: 'Cursive', sans-serif;
-    color: #003366;
-    animation: logoAnimation 3s ease-in-out infinite;
-}
-
-@keyframes logoAnimation {
-    0% {
-        letter-spacing: 0px;
-    }
-    50% {
-        letter-spacing: 5px;
-    }
-    100% {
-        letter-spacing: 0px;
-    }
-}
-
 .navbar-lists,
 .navbar-auth {
     list-style-type: none;
@@ -69,15 +50,23 @@ body {
 .navbar-lists li a:hover, .navbar-auth li a:hover {
     color: #d1852a;
 }
+.navbar-auth li {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
 
 .profile-icon {
-    position: relative;
+    position: absolute;
+    top: 10px;
+    right: 10px;
     cursor: pointer;
 }
 .profile-img {
     width: 30px;
     height: 30px;
     border-radius: 50%;
+    object-fit: cover;
 }
 .profile-menu {
     position: absolute;
@@ -89,10 +78,6 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     z-index: 1000;
 }
-
-/* .navbar-lists {
-    flex: 1; 
-} */
 
 
 .profile-menu a {
