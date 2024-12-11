@@ -14,7 +14,7 @@ const Main = () => {
     if (page === 'Home') currentPage = <Home />;
     else if (page === 'Login') currentPage = <LoginForm navigate={setPage} />;
     else if (page === 'Register') currentPage = <RegistrationForm navigate={setPage} />;
-    else if (page === 'Lists') currentPage = <Lists />;
+    else if (page === 'Restaurant') currentPage = <Restaurant/>;
     else if (page === 'Contact') currentPage = <Contact />;
 
     return (
