@@ -6,26 +6,33 @@ const AddRestaurant = () => {
     const [location, setLocation] = useState("");
     const [cuisine, setCuisine] = useState("");
     const [maxCapacity, setMaxCapacity] = useState("");
-    const [halal, setHalal] = useState("No");
+    const [halal, setHalal] = useState("");
     const [minHealthRating, setMinHealthRating] = useState("");
     const [dietary, setDietary] = useState("");
     const [message, setMessage] = useState("");
 
     const navigate = useNavigate(); 
 
-    const addRestaurant = () => {
-        fetch('http://127.0.0.1:5005/addrestaurant', {
-            method: 'POST',
+     const addRestaurant = () => {
+        if (!name || !location || !cuisine || !maxCapacity) {
+            setMessage('Please fill in all required fields.');
+            return;
+        }
+
+        fetch("http://127.0.0.1:5005/addresturant", {
+            method: "POST",
             headers: {
-                'Content-Type': 'application/json',
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
+            
             body: JSON.stringify({
                 name,
                 location,
                 cuisine,
-                max_capacity: parseInt(maxCapacity, 10),
+                maxcapacity: parseInt(maxCapacity, 10),
                 halal,
-                min_health_rating: minHealthRating,
+                min_of_health: minHealthRating,
                 dietary,
             }),
         })
@@ -33,14 +40,16 @@ const AddRestaurant = () => {
             if (!response.ok) {
                 throw new Error('Failed to add restaurant');
             }
+            return response.text
+        })
+        .then((data) => {
             setMessage('Restaurant added successfully');
             alert('Restaurant added successfully');
-
-            navigate('/lists');  
+            navigate('/Restaurants');
         })
+
         .catch((error) => {
             setMessage(`Error: ${error.message}`);
-            alert(error.message);
         });
     }
 
@@ -58,6 +67,7 @@ const AddRestaurant = () => {
                     type="text"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
+                    required
                 />
                 <br />
 
@@ -66,6 +76,7 @@ const AddRestaurant = () => {
                     type="text"
                     value={location}
                     onChange={(e) => setLocation(e.target.value)}
+                    required
                 />
                 <br />
 
@@ -74,6 +85,7 @@ const AddRestaurant = () => {
                     type="text"
                     value={cuisine}
                     onChange={(e) => setCuisine(e.target.value)}
+                    required
                 />
                 <br />
 

@@ -95,4 +95,8 @@
 .registration-icon:hover {
     transform: scale(1.2);
 } 
+
+.registration-div {
+    margin-top: 20px;
+}
  

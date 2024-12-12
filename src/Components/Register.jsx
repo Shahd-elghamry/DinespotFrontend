@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import AddRestaurant from "./AddResturant";
 import appleIcon from "../photos/apple-icon.png";
 import './Register.css';
 
@@ -10,6 +12,9 @@ const RegistrationForm = () => {
     const [user_type, setUserType] = useState("");  
     const [phonenum, setPhonenum] = useState(" ")
     const [message, setMessage] = useState("");
+    const [registrationSuccessful, setRegistrationSuccessful] = useState(false);
+
+    const navigate = useNavigate();
 
     const handleSelectUserType = (type)=>{
         setUserType(type);
@@ -28,6 +33,11 @@ const RegistrationForm = () => {
                 }
                 setMessage("Registration successful");
                 alert("Registration successful");
+                if (user_type === "owner") {
+                    setRegistrationSuccessful(true); 
+                } else {
+                    navigate("/"); 
+                }
             })
             .catch((error) => {
                 setMessage(error.message);
@@ -51,7 +61,7 @@ const RegistrationForm = () => {
                 </button>
             </div>
             )}
-            {step === 2 && ( 
+            {step === 2 && !registrationSuccessful && ( 
                 <div className="registration-form">
             <h1>Registration Form</h1>
             <p> 
@@ -107,6 +117,7 @@ const RegistrationForm = () => {
             {message && <p>{message}</p>}
         </div>
             )}
+            {registrationSuccessful && <AddRestaurant />}
         </div>
     );
 };
