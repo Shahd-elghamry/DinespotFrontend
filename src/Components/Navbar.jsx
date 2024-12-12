@@ -29,7 +29,6 @@ const Navbar = () => {
             <ul className="navbar-lists">
                 <li><Link to="/">Home</Link></li>
                 <li><Link to="/Restaurants">Restaurants</Link></li>
-                <li><Link to="/Contact">Contact</Link></li>
             </ul>
             <ul className='navbar-auth'>
             {/* conditional (ternary) operator {!something ?(...):(...)} */}
@@ -40,7 +39,7 @@ const Navbar = () => {
                 </>
             ) : (
                 <li className="profile-icon" onClick={() => setProfileMenuVisible(!profileMenuVisible)}>
-                <img src="./photos/profile-icon.png" alt="Profile" className="profile-img" />
+                <img src="./photos/profileIcon.png" alt="Profile" className="profile-img" />
                 {profileMenuVisible && (
                     <div className="profile-menu">
                         <Link to="/Profile">View Profile</Link>

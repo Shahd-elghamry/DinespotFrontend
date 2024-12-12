@@ -26,7 +26,6 @@ const Footer = () => {
             <li><button onClick={() => openPopup('booking')}>Booking</button></li>
             <li><a href="/faq">FAQ</a></li>
             <li><button onClick={() => openPopup('contact')}>Contact</button></li>
-            <li><button onClick={() => openPopup('complaint')}>Complaint</button></li>
           </ul>
         </div>
         <div className="footer-social">
