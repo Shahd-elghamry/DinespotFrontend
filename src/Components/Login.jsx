@@ -23,9 +23,6 @@ const LoginForm = () => {
             })
             .then((data) => {
                 alert(data.message);
-
-                // Since the token is set as an HTTP-only cookie, we won't be able to access it with js-cookie.
-                // You should rely on server-side validation for this token
                 navigate("/"); // Navigate to home after login
             })
             .catch((error) => {
