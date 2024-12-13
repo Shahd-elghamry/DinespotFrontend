@@ -29,6 +29,7 @@ const Navbar = () => {
             <ul className="navbar-lists">
                 <li><Link to="/">Home</Link></li>
                 <li><Link to="/Restaurants">Restaurants</Link></li>
+                <li><Link to="/AddRestaurant">Add Restaurant</Link></li>
             </ul>
             <ul className='navbar-auth'>
             {!isLoggedIn ? (

@@ -20,7 +20,7 @@ function App() {
             <Route path="/login" element={<LoginForm />} />
             <Route path="/register" element={<RegistrationForm />} />
             <Route path="*" element={<div>404 - Page Not Found</div>} />
-            <Route path="/add-restaurant" element={<AddRestaurant />} />
+            <Route path="/AddRestaurant" element={<AddRestaurant />} />
           </Routes>
         </div>
         <Footer />
