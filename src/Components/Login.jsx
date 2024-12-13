@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom'; 
+import './Login.css';
 
 const LoginForm = () => {
     const [email, setEmail] = useState("");
@@ -70,28 +71,49 @@ const LoginForm = () => {
         }
     };
 
-    return (
-        <div className="login-form">
-            <h1>{isForgotPassword ? "Forgot Password" : "Login"}</h1>
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        loginUser();
+    };
 
-            {!isForgotPassword ? (
-                <form
-                    onSubmit={(e) => {
-                        e.preventDefault();
-                        loginUser();
-                    }}
-                >
-                    <label>Email:</label>
+    const handleForgotPasswordSubmit = (e) => {
+        e.preventDefault();
+        handleForgotPassword();
+    };
+
+    return (
+        <div className="login-div">
+            {isForgotPassword ? (
+                <form className="login-form" onSubmit={handleForgotPasswordSubmit}>
+                    <h1>Forgot Password</h1>
                     <input
                         type="email"
+                        placeholder="Enter your email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
                     />
                     <br />
-                    <label>Password:</label>
+                    <button type="submit">Reset Password</button>
+                    <br />
+                    <button type="button" onClick={() => setIsForgotPassword(false)}>
+                        Back to Login
+                    </button>
+                </form>
+            ) : (
+                <form className="login-form" onSubmit={handleSubmit}>
+                    <h1>Login</h1>
+                    <input
+                        type="email"
+                        placeholder="Email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                    />
+                    <br />
                     <input
                         type="password"
+                        placeholder="Password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
@@ -104,12 +126,12 @@ const LoginForm = () => {
                     </div>
 
                     <button type="button" className="continue-with-button apple">
-                        <img src="/apple-logo.png" alt="Apple" className="provider-icon" />
+                        <img src="/images/appleIcon.png" alt="Apple" className="provider-icon" />
                         Continue with Apple
                     </button>
                     
                     <button type="button" className="continue-with-button google">
-                        <img src="/google-logo.png" alt="Google" className="provider-icon" />
+                        <img src="/images/googleIcon.png" alt="Google" className="provider-icon" />
                         Continue with Google
                     </button>
 
@@ -120,26 +142,9 @@ const LoginForm = () => {
                         </button>
                     </div>
                     <br />
-                    <a href="#" onClick={() => setIsForgotPassword(true)}>Forgot Password?</a>
-                </form>
-            ) : (
-                <form
-                    onSubmit={(e) => {
-                        e.preventDefault();
-                        handleForgotPassword();
-                    }}
-                >
-                    <label>Enter your email:</label>
-                    <input
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                    />
-                    <br />
-                    <button type="submit">Submit</button>
-                    <br />
-                    <a href="#" onClick={() => setIsForgotPassword(false)}>Back to Login</a>
+                    <button type="button" className="forgot-password-link" onClick={() => setIsForgotPassword(true)}>
+                        Forgot Password?
+                    </button>
                 </form>
             )}
             {message && <p style={{ color: "red" }}>{message}</p>}

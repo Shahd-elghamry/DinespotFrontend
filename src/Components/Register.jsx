@@ -310,12 +310,12 @@ const Register = () => {
           </div>
 
           <button type="button" className="continue-with-button apple">
-            <img src="/photos/apple-logo.png" alt="Apple" className="provider-icon" />
+            <img src="/images/appleIcon.png" alt="Apple" className="provider-icon" />
             Continue with Apple
           </button>
           
           <button type="button" className="continue-with-button google">
-            <img src="/google-logo.png" alt="Google" className="provider-icon" />
+            <img src="/images/googleIcon.png" alt="Google" className="provider-icon" />
             Continue with Google
           </button>
         </form>
