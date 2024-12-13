@@ -1,5 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap');
+
 body {
-    background-color: #f9f5e1; /* Cream background */
+    background-color: #f9f5e1; 
     font-family: 'Arial', sans-serif;
 }
 
@@ -13,17 +15,19 @@ body {
     display: flex;
     justify-content: space-between; /* Spread the logo and lists */
     align-items: center; /* Center items vertically */
+    
     background-color: transparent; 
     backdrop-filter: blur(10px); 
-    z-index: 1000; /* Ensures it stays above other elements */
-}
 
+    z-index: 1000; /* no matter the page navigated to it'll be there*/
+}
 
 .navbar-logo h1 {
     margin: 0;
-    font-size: 1.5rem;
+    font-size: 2.5rem;
     color: #000000;
     font-weight: bold;
+    font-family: 'UnifrakturCook', cursive;
     animation: fadeIn 2s ease-in-out;
 }
 
@@ -35,7 +39,6 @@ body {
     margin: 0;
     padding: 0;
 }
-
 
 .navbar-lists li a, .navbar-auth li a  {
     color:#000000 ;
