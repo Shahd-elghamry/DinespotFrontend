@@ -23,6 +23,41 @@ const Home = () => {
             image: "https://images.unsplash.com/photo-1559339352-11d035aa65de",
             title: "Perfect Ambiance",
             description: "Create memorable moments"
+        },
+        {
+            image: "https://images.unsplash.com/photo-1552566626-52f8b828add9",
+            title: "Gourmet Delights",
+            description: "Savor exceptional flavors"
+        },
+        {
+            image: "https://images.unsplash.com/photo-1578474846511-04ba529f0b88",
+            title: "Fine Dining",
+            description: "Elevate your dining experience"
+        },
+        {
+            image: "https://images.unsplash.com/photo-1514933651103-005eec06c04b",
+            title: "Local Favorites",
+            description: "Discover hidden gems"
+        },
+        {
+            image: "https://images.unsplash.com/photo-1466978913421-dad2ebd01d17",
+            title: "Outdoor Dining",
+            description: "Enjoy meals with a view"
+        },
+        {
+            image: "https://images.unsplash.com/photo-1554679665-f5537f187268",
+            title: "International Cuisine",
+            description: "Travel the world through food"
+        },
+        {
+            image: "https://images.unsplash.com/photo-1592861956120-e524fc739696",
+            title: "Family Gatherings",
+            description: "Create lasting memories"
+        },
+        {
+            image: "https://images.unsplash.com/photo-1528605248644-14dd04022da1",
+            title: "Casual Dining",
+            description: "Relaxed and comfortable atmosphere"
         }
     ];
 
@@ -58,7 +93,7 @@ const Home = () => {
             clearInterval(interval);
             observer.disconnect();
         };
-    }, []);
+    }, [slides.length]);
 
     return (
         <div className="home-container">
@@ -88,29 +123,29 @@ const Home = () => {
             >
                 <div className="section-header">
                     <h2>Featured Restaurants</h2>
-                    <Link to="/Restaurants" className="see-more-btn">
-                        See More
-                    </Link>
+                    {restaurants.length > 5 && (
+                        <Link to="/Restaurants" className="see-more-btn">
+                            See All
+                        </Link>
+                    )}
                 </div>
 
-                <div className="restaurant-grid">
-                    {restaurants.slice(0, 6).map((restaurant) => (
-                        <div key={restaurant.id} className="restaurant-card">
-                            <img
-                                src={restaurant.image || 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4'}
-                                alt={restaurant.name}
-                                className="restaurant-image"
-                            />
-                            <div className="restaurant-info">
-                                <h3 className="restaurant-name">{restaurant.name}</h3>
-                                <p className="restaurant-description">{restaurant.description}</p>
-                                <p className="restaurant-location">
-                                    <i className="fas fa-map-marker-alt"></i>
-                                    {restaurant.location}
-                                </p>
+                <div className="restaurant-scroll">
+                    <div className="restaurant-row">
+                        {restaurants.slice(0, 5).map((restaurant) => (
+                            <div key={restaurant.id} className="restaurant-card">
+                                <img
+                                    src={restaurant.image || 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4'}
+                                    alt={restaurant.name}
+                                    className="restaurant-image"
+                                />
+                                <div className="restaurant-info">
+                                    <h3>{restaurant.name}</h3>
+                                    <p>{restaurant.description}</p>
+                                </div>
                             </div>
-                        </div>
-                    ))}
+                        ))}
+                    </div>
                 </div>
             </div>
         </div>

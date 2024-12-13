@@ -22,7 +22,7 @@ body {
 .navbar-logo h1 {
     margin: 0;
     font-size: 1.5rem;
-    color: #003366;
+    color: #000000;
     font-weight: bold;
     animation: fadeIn 2s ease-in-out;
 }
@@ -38,18 +38,21 @@ body {
 
 
 .navbar-lists li a, .navbar-auth li a  {
-    color:#003366 ;
-    font-size: 1rem;
-    text-decoration: none;
+    color:#000000 ;
     font-size: 1.1rem;
+    text-decoration: none;
     font-weight: bold;
     cursor: pointer;
-    transition: color 0.3s ease;
+    transition: all 0.3s ease;
+    border:rgb(139, 137, 137);
+    border-radius: 20px;
+    padding: 8px 15px;
 }
 
 .navbar-lists li a:hover, .navbar-auth li a:hover {
-    color: #d1852a;
+    background-color: rgba(255, 255, 255, 0.2);
 }
+
 .navbar-auth li {
     cursor: pointer;
     display: flex;

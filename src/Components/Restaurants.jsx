@@ -4,7 +4,6 @@ const RestaurantsComponent = () => {
     const [restaurants, setRestaurants] = useState([]);
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState("");
-    const [type, setType] = useState("all"); // For example, can be based on user filters
 
     // Fetch restaurants with type or other dependencies
     useEffect(() => {
@@ -30,7 +29,7 @@ const RestaurantsComponent = () => {
         };
 
         fetchData();  // Call fetchData every time type changes or on component mount
-    }, [type]);
+    }, []);
 
     return (
         <div>
