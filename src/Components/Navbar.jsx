@@ -26,6 +26,7 @@ const Navbar = () => {
     }, []);
 
     const handleLogout = () => {
+        //for the logout
         localStorage.removeItem("authToken");
         localStorage.removeItem("userType");
         localStorage.removeItem("username");
@@ -48,7 +49,7 @@ const Navbar = () => {
         let roleSpecificItems = null;
 
         switch(userType) {
-            case 'regular':
+            case 'regular_user':
                 roleSpecificItems = (
                     <Link to="/bookings">My Bookings</Link>
                 );

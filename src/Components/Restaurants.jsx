@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { apiCall } from "../utils/api"; 
 
 const RestaurantsComponent = () => {
     const [restaurants, setRestaurants] = useState([]);
@@ -11,7 +10,13 @@ const RestaurantsComponent = () => {
     useEffect(() => {
         const fetchData = () => {
             setLoading(true);
-            apiCall('/restaurants')  // Use your API function to call the endpoint
+            fetch('http://127.0.0.1:5005/restaurants')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch restaurants');
+                    }
+                    return response.json();
+                })
                 .then((data) => {
                     setRestaurants(data);
                 })
@@ -45,4 +50,3 @@ const RestaurantsComponent = () => {
 };
 
 export default RestaurantsComponent;
-
