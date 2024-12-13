@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom'; 
 import './Login.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faApple, faGoogle } from '@fortawesome/free-brands-svg-icons';
 
 const LoginForm = () => {
     const [email, setEmail] = useState("");
@@ -126,12 +128,12 @@ const LoginForm = () => {
                     </div>
 
                     <button type="button" className="continue-with-button apple">
-                        <img src="/images/appleIcon.png" alt="Apple" className="provider-icon" />
+                        <FontAwesomeIcon icon={faApple} className="provider-icon" />
                         Continue with Apple
                     </button>
                     
                     <button type="button" className="continue-with-button google">
-                        <img src="/images/googleIcon.png" alt="Google" className="provider-icon" />
+                        <FontAwesomeIcon icon={faGoogle} className="provider-icon" />
                         Continue with Google
                     </button>
 

@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import './Register.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faApple } from '@fortawesome/free-brands-svg-icons';
+import { faGoogle } from '@fortawesome/free-brands-svg-icons';
+
+
 
 const Register = () => {
   const [userType, setUserType] = useState(null); 
@@ -310,12 +315,12 @@ const Register = () => {
           </div>
 
           <button type="button" className="continue-with-button apple">
-            <img src="/images/appleIcon.png" alt="Apple" className="provider-icon" />
+            <FontAwesomeIcon icon={faApple} className="provider-icon" />
             Continue with Apple
           </button>
-          
+
           <button type="button" className="continue-with-button google">
-            <img src="/images/googleIcon.png" alt="Google" className="provider-icon" />
+            <FontAwesomeIcon icon={faGoogle} className="provider-icon" />
             Continue with Google
           </button>
         </form>
