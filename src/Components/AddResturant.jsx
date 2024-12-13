@@ -37,11 +37,16 @@ const AddRestaurant = () => {
             }),
         })
         .then((response) => {
+            if (response.status === 409) {
+                setMessage('Restaurant already exists with the same name and location.');
+                return; 
+            }
             if (!response.ok) {
                 throw new Error('Failed to add restaurant');
             }
-            return response.text
+            return response.text();
         })
+
         .then((data) => {
             setMessage('Restaurant added successfully');
             alert('Restaurant added successfully');
