@@ -31,21 +31,25 @@ const Navbar = () => {
                 <li><Link to="/Restaurants">Restaurants</Link></li>
             </ul>
             <ul className='navbar-auth'>
-            {/* conditional (ternary) operator {!something ?(...):(...)} */}
             {!isLoggedIn ? (
                     <>
                 <li><Link to="/Login">Login</Link></li>
                 <li><Link to="/Register">Register</Link></li>
                 </>
             ) : (
-                <li className="profile-icon" onClick={() => setProfileMenuVisible(!profileMenuVisible)}>
-                <img src="./photos/profileIcon.png" alt="Profile" className="profile-img" />
+                <li className="profile-section">
+                    <button 
+                    className='profile-button'
+                    onClick={() => setProfileMenuVisible(!profileMenuVisible)}>
+                        Profile
+                    </button>
                 {profileMenuVisible && (
                     <div className="profile-menu">
                         <Link to="/Profile">View Profile</Link>
                         <Link to="/Bookings">My Bookings</Link>
-                        <Link to="/Reviews">My Reviews</Link>
-                        <button onClick={handleLogout}>Logout</button>
+                        <Link to="/Settings"> settings</Link>
+                        <Link to="/Reviews">My reviews</Link>
+                        <button onClick={handleLogout} className='logout-button'>Logout</button>
                     </div>
                 )}
                 </li>

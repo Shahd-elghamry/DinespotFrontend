@@ -33,7 +33,7 @@ const RegistrationForm = () => {
                 }
                 setMessage("Registration successful");
                 alert("Registration successful");
-                if (user_type === "owner") {
+                if (user_type === "restaurant_owner") {
                     setRegistrationSuccessful(true); 
                 } else {
                     navigate("/"); 
@@ -51,12 +51,12 @@ const RegistrationForm = () => {
                 <h1>Choose User Type</h1>
                 <button 
                 className="userType-button"
-                onClick={()=>handleSelectUserType("regular")} >
+                onClick={()=>handleSelectUserType("regular_user")} >
                     Normal User
                 </button>
                 <button
                 className="userType-button"
-                onClick={()=> handleSelectUserType("owner")}>
+                onClick={()=> handleSelectUserType("restaurant_owner")}>
                     Restaurant Owner
                 </button>
             </div>
@@ -66,7 +66,7 @@ const RegistrationForm = () => {
             <h1>Registration Form</h1>
             <p> 
                 Registering as:{" "}
-                <strong>{user_type === "regular" ? "Normal User": "Restaurant Owner"}</strong>
+                <strong>{user_type === "regular" ? "regular_user": "restaurant_owner"}</strong>
                 </p>
             <form
                 onSubmit={(e) => {

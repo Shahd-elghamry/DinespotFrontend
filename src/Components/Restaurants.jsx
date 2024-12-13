@@ -1,20 +1,48 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { apiCall } from "../utils/api"; 
 
-const Restaurant = () => {
-    const restaurants = ["The Gourmet Spot", "Seafood Paradise", "Café Delight", "Urban Grill", "Bistro Bliss"];
+const RestaurantsComponent = () => {
+    const [restaurants, setRestaurants] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [message, setMessage] = useState("");
+    const [type, setType] = useState("all"); // For example, can be based on user filters
+
+    // Fetch restaurants with type or other dependencies
+    useEffect(() => {
+        const fetchData = () => {
+            setLoading(true);
+            apiCall('/restaurants')  // Use your API function to call the endpoint
+                .then((data) => {
+                    setRestaurants(data);
+                })
+                .catch((error) => {
+                    console.error("Error fetching restaurants:", error);
+                    setMessage(`Error fetching restaurants: ${error.message}`);
+                })
+                .finally(() => {
+                    setLoading(false);
+                });
+        };
+
+        fetchData();  // Call fetchData every time type changes or on component mount
+    }, [type]);
 
     return (
-        <div style={{ padding: "20px" }}>
-            <h1 style={{ textAlign: "center", color: "#003366" }}>Our Restaurants</h1>
-            <ul style={{ listStyleType: "none", padding: "0", textAlign: "center", color: "#d1852a" }}>
-                {restaurants.map((name, index) => (
-                    <li key={index} style={{ margin: "10px 0", fontSize: "1.2rem" }}>
-                        {name}
-                    </li>
+        <div>
+            <h1>Restaurants</h1>
+
+            {loading && <p>Loading...</p>}
+            
+            {message && <p>{message}</p>}
+            
+            <ul>
+                {restaurants.map((restaurant, index) => (
+                    <li key={index}>{restaurant.name}</li>
                 ))}
             </ul>
         </div>
     );
 };
 
-export default Restaurant;
+export default RestaurantsComponent;
+
