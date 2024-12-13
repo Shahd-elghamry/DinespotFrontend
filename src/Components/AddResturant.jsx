@@ -31,9 +31,9 @@ const AddRestaurant = () => {
                 location,
                 cuisine,
                 maxcapacity: parseInt(maxCapacity, 10),
-                halal,
+                halal: halal || "No",
                 min_of_health: minHealthRating,
-                dietary,
+                dietary: dietary
             }),
         })
         .then((response) => {
