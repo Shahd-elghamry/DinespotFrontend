@@ -9,44 +9,65 @@ const LoginForm = () => {
 
     const navigate = useNavigate();
 
-    const loginUser = () => {
-        fetch('http://127.0.0.1:5005/user/login', {
-            method: 'POST',
-            headers: { 'Content-type': 'application/json' },
-            body: JSON.stringify({ email, password }),
-            credentials: "include"
-        })
-        .then((response) => {
+    const loginUser = async () => {
+        try {
+            console.log('Attempting login with:', { email }); // Debug log
+
+            const response = await fetch('http://127.0.0.1:5005/user/login', {
+                method: 'POST',
+                headers: { 'Content-type': 'application/json' },
+                body: JSON.stringify({ email, password }),
+                credentials: "include"
+            });
+
+            const data = await response.json();
+            console.log('Login response:', data); // Debug log
+
             if (!response.ok) {
-                throw new Error('Invalid credentials');
+                throw new Error(data.message || 'Login failed');
             }
-            return response.json();
-        })
-        .then((data) => {
-            // Store the token in localStorage
+
             if (data.token) {
+                // Store the token and user info in localStorage
                 localStorage.setItem('authToken', data.token);
-                // Reload the page to update the navbar
-                window.location.reload();
+                localStorage.setItem('userType', data.userType);
+                localStorage.setItem('username', data.username);
+                localStorage.setItem('email', data.email);
+                
+                console.log('Stored in localStorage:', {
+                    token: data.token,
+                    userType: data.userType,
+                    username: data.username,
+                    email: data.email
+                }); // Debug log
+
+                // Navigate to home first
+                navigate("/");
+                
+                // Then reload the page after a short delay
+                setTimeout(() => {
+                    window.location.reload();
+                }, 100);
             }
-            alert(data.message);
-            navigate("/");
-        })
-        .catch((error) => {
+        } catch (error) {
+            console.error('Login error:', error); // Debug log
             setMessage(error.message);
-        });
+        }
     };
 
-    const handleForgotPassword = () => {
-        fetch('http://127.0.0.1:5005/user/forgot-password', {
-            method: 'POST',
-            headers: { 'Content-type': 'application/json' },
-            body: JSON.stringify({ email }),
-            credentials: "include"
-        })
-        .then((response) => response.text())
-        .then((data) => setMessage(data))
-        .catch((error) => setMessage('An error occurred. Please try again.'));
+    const handleForgotPassword = async () => {
+        try {
+            const response = await fetch('http://127.0.0.1:5005/user/forgot-password', {
+                method: 'POST',
+                headers: { 'Content-type': 'application/json' },
+                body: JSON.stringify({ email }),
+                credentials: "include"
+            });
+            const data = await response.text();
+            setMessage(data);
+        } catch (error) {
+            setMessage('An error occurred. Please try again.');
+        }
     };
 
     return (

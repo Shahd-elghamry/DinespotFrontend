@@ -6,21 +6,74 @@ import profileIcon from '../photos/profileIcon.png';
 const Navbar = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [profileMenuVisible, setProfileMenuVisible] = useState(false);
+    const [username, setUsername] = useState('');
+    const [userType, setUserType] = useState('');
    
     useEffect(() => {
-        // Check if there is a token that is still valid / logged 
         const token = localStorage.getItem("authToken");
-        console.log("Token:", token); // Debug log
+        const storedUsername = localStorage.getItem("username");
+        const storedUserType = localStorage.getItem("userType");
+        
         if (token) {
             setIsLoggedIn(true);
+            if (storedUsername) {
+                setUsername(storedUsername);
+            }
+            if (storedUserType) {
+                setUserType(storedUserType);
+            }
         }
     }, []);
 
     const handleLogout = () => {
-        // For the logout 
-        setIsLoggedIn(false);
         localStorage.removeItem("authToken");
+        localStorage.removeItem("userType");
+        localStorage.removeItem("username");
+        localStorage.removeItem("email");
+        setIsLoggedIn(false);
         setProfileMenuVisible(false);
+        window.location.reload();
+    };
+
+    const canAddRestaurant = userType === 'restaurant_owner' || userType === 'admin';
+
+    const renderProfileMenuItems = () => {
+        const commonItems = (
+            <>
+                <Link to="/profile">My Profile</Link>
+                <Link to="/settings">Settings</Link>
+            </>
+        );
+
+        let roleSpecificItems = null;
+
+        switch(userType) {
+            case 'regular':
+                roleSpecificItems = (
+                    <Link to="/bookings">My Bookings</Link>
+                );
+                break;
+            case 'restaurant_owner':
+                roleSpecificItems = (
+                    <Link to="/my-restaurants">My Restaurants</Link>
+                );
+                break;
+            case 'admin':
+                roleSpecificItems = (
+                    <Link to="/control-panel">Control Panel</Link>
+                );
+                break;
+            default:
+                break;
+        }
+
+        return (
+            <>
+                {commonItems}
+                {roleSpecificItems}
+                <button onClick={handleLogout}>Logout</button>
+            </>
+        );
     };
 
     return (
@@ -31,7 +84,9 @@ const Navbar = () => {
             <ul className="navbar-lists">
                 <li><Link to="/">Home</Link></li>
                 <li><Link to="/Restaurants">Restaurants</Link></li>
-                <li><Link to="/AddRestaurant">Add Restaurant</Link></li>
+                {canAddRestaurant && (
+                    <li><Link to="/AddRestaurant">Add Restaurant</Link></li>
+                )}
             </ul>
             <ul className='navbar-auth'>
             {!isLoggedIn ? (
@@ -50,14 +105,11 @@ const Navbar = () => {
                             alt="Profile" 
                             className="profile-image"
                         />
+                        <span className="username">{username}</span>
                     </div>
                     {profileMenuVisible && (
                         <div className="profile-menu">
-                            <Link to="/profile">My Profile</Link>
-                            <Link to="/bookings">My Bookings</Link>
-                            <Link to="/settings">Settings</Link>
-                            <Link to="/reviews">My Reviews</Link>
-                            <button onClick={handleLogout}>Logout</button>
+                            {renderProfileMenuItems()}
                         </div>
                     )}
                 </li>

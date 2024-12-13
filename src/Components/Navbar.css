@@ -66,10 +66,9 @@ body {
 .profile-icon {
     display: flex;
     align-items: center;
-    justify-content: center;
+    gap: 8px;
     cursor: pointer;
     padding: 4px;
-    border-radius: 50%;
     transition: transform 0.2s ease;
 }
 
@@ -82,6 +81,12 @@ body {
     height: 32px;
     border-radius: 50%;
     object-fit: cover;
+}
+
+.username {
+    color: #003366;
+    font-size: 0.9rem;
+    font-weight: 500;
 }
 
 .profile-menu {
