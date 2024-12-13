@@ -98,6 +98,27 @@ const LoginForm = () => {
                     />
                     <br />
                     <button type="submit">Login</button>
+                    
+                    <div className="divider">
+                        <span>or</span>
+                    </div>
+
+                    <button type="button" className="continue-with-button apple">
+                        <img src="/apple-logo.png" alt="Apple" className="provider-icon" />
+                        Continue with Apple
+                    </button>
+                    
+                    <button type="button" className="continue-with-button google">
+                        <img src="/google-logo.png" alt="Google" className="provider-icon" />
+                        Continue with Google
+                    </button>
+
+                    <div className="create-account">
+                        <span>Don't have an account?</span>
+                        <button type="button" className="create-account-button" onClick={() => navigate('/register')}>
+                            Create Account
+                        </button>
+                    </div>
                     <br />
                     <a href="#" onClick={() => setIsForgotPassword(true)}>Forgot Password?</a>
                 </form>

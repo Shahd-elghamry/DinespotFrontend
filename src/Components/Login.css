@@ -9,21 +9,21 @@
 }
 
 .login-form {
-    margin: 20px auto;
-    width: 100%;
+    margin: 50px auto;
+    width: 80%;
     max-width: 400px;
     padding: 30px;
     border: 2px solid #001f3f;
     border-radius: 10px;
     background-color: #f5f5dc;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
 }
 
 .login-form h1 {
     font-size: 24px;
     margin-bottom: 30px;
     color: #001f3f;
-    text-align: center;
 }
 
 .login-form label {
@@ -41,6 +41,7 @@
     border: 1px solid #001f3f;
     border-radius: 5px;
     font-size: 16px;
+    box-sizing: border-box;
 }
 
 .login-form button {
@@ -96,4 +97,75 @@
 .login-links a:hover {
     color: #174f86;
     text-decoration: underline;
+}
+
+.divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 20px 0;
+}
+
+.divider::before,
+.divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #001f3f;
+}
+
+.divider span {
+    padding: 0 10px;
+    color: #001f3f;
+    font-size: 14px;
+}
+
+.continue-with-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    font-size: 16px;
+    border: 2px solid #001f3f;
+    border-radius: 5px;
+    background-color: #f5f5dc;
+    color: #001f3f;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.continue-with-button:hover {
+    background-color: #e5e5c5;
+}
+
+.provider-icon {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+}
+
+.create-account {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.create-account span {
+    display: block;
+    margin-bottom: 10px;
+    color: #001f3f;
+}
+
+.create-account-button {
+    background-color: transparent !important;
+    color: #001f3f !important;
+    border: 2px solid #001f3f !important;
+    padding: 10px 20px !important;
+    font-weight: bold;
+}
+
+.create-account-button:hover {
+    background-color: #001f3f !important;
+    color: #f5f5dc !important;
 }

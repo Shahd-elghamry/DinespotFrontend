@@ -243,6 +243,9 @@ const Register = () => {
         </form>
       ) : (
         <form className="registration-form" onSubmit={handleRegister}>
+          <button type="button" className="back-button" onClick={() => setUserType(null)}>
+            ↩
+          </button>
           <h1>Register as {userType.replace("_", " ")}</h1>
           
           <div className="form-group">
@@ -301,7 +304,20 @@ const Register = () => {
           </div>
 
           <button type="submit">Register</button>
-          <button type="button" onClick={() => setUserType(null)}>Go Back</button>
+
+          <div className="divider">
+            <span>or</span>
+          </div>
+
+          <button type="button" className="continue-with-button apple">
+            <img src="/photos/apple-logo.png" alt="Apple" className="provider-icon" />
+            Continue with Apple
+          </button>
+          
+          <button type="button" className="continue-with-button google">
+            <img src="/google-logo.png" alt="Google" className="provider-icon" />
+            Continue with Google
+          </button>
         </form>
       )}
     </div>
