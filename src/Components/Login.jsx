@@ -14,22 +14,27 @@ const LoginForm = () => {
             method: 'POST',
             headers: { 'Content-type': 'application/json' },
             body: JSON.stringify({ email, password }),
-            credentials: "include" // Ensure the cookie is sent with the request
+            credentials: "include"
         })
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error('Invalid credentials');
-                }
-                return response.json();
-            })
-            .then((data) => {
-                alert(data.message);
-                navigate("/"); // Navigate to home after login
-            })
-            .catch((error) => {
-                setMessage(error.message);
-                // alert(error.message);
-            });
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error('Invalid credentials');
+            }
+            return response.json();
+        })
+        .then((data) => {
+            // Store the token in localStorage
+            if (data.token) {
+                localStorage.setItem('authToken', data.token);
+                // Reload the page to update the navbar
+                window.location.reload();
+            }
+            alert(data.message);
+            navigate("/");
+        })
+        .catch((error) => {
+            setMessage(error.message);
+        });
     };
 
     const handleForgotPassword = () => {
@@ -40,43 +45,42 @@ const LoginForm = () => {
             credentials: "include"
         })
         .then((response) => response.text())
-        .then((data) => setMessage(data))  // Display the response message from backend
+        .then((data) => setMessage(data))
         .catch((error) => setMessage('An error occurred. Please try again.'));
     };
 
     return (
         <div className="login-form">
-             <h1>{isForgotPassword ? "Forgot Password" : "Login"}</h1>
+            <h1>{isForgotPassword ? "Forgot Password" : "Login"}</h1>
 
-             {!isForgotPassword ? (
-                // Login Form
-            <form
-                onSubmit={(e) => {
-                    e.preventDefault();
-                    loginUser();
-                }}
-            >
-                <label>Email:</label>
-                <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                />
-                <br />
-                <label>Password:</label>
-                <input
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                />
-                <br />
-                <button type="submit">Login</button>
-                <br />
-                <a href="#" onClick={() => setIsForgotPassword(true)}>Forgot Password?</a>
-            </form>
-             ) : (
+            {!isForgotPassword ? (
+                <form
+                    onSubmit={(e) => {
+                        e.preventDefault();
+                        loginUser();
+                    }}
+                >
+                    <label>Email:</label>
+                    <input
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                    />
+                    <br />
+                    <label>Password:</label>
+                    <input
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                    />
+                    <br />
+                    <button type="submit">Login</button>
+                    <br />
+                    <a href="#" onClick={() => setIsForgotPassword(true)}>Forgot Password?</a>
+                </form>
+            ) : (
                 <form
                     onSubmit={(e) => {
                         e.preventDefault();
@@ -102,4 +106,3 @@ const LoginForm = () => {
 };
 
 export default LoginForm;
-
