@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom'; 
-
 import './Navbar.css'; 
+import profileIcon from '../photos/profileIcon.png';
 
 const Navbar = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -9,8 +9,9 @@ const Navbar = () => {
    
     useEffect(() => {
         // Check if there is a token that is still valid / logged 
-        const userToken = localStorage.getItem("userToken");
-        if (userToken) {
+        const token = localStorage.getItem("authToken");
+        console.log("Token:", token); // Debug log
+        if (token) {
             setIsLoggedIn(true);
         }
     }, []);
@@ -18,7 +19,8 @@ const Navbar = () => {
     const handleLogout = () => {
         // For the logout 
         setIsLoggedIn(false);
-        localStorage.removeItem("userToken"); 
+        localStorage.removeItem("authToken");
+        setProfileMenuVisible(false);
     };
 
     return (
@@ -33,26 +35,31 @@ const Navbar = () => {
             </ul>
             <ul className='navbar-auth'>
             {!isLoggedIn ? (
-                    <>
-                <li><Link to="/Login">Login</Link></li>
-                <li><Link to="/Register">Register</Link></li>
+                <>
+                    <li><Link to="/Login">Login</Link></li>
+                    <li><Link to="/Register">Register</Link></li>
                 </>
             ) : (
                 <li className="profile-section">
-                    <button 
-                    className='profile-button'
-                    onClick={() => setProfileMenuVisible(!profileMenuVisible)}>
-                        Profile
-                    </button>
-                {profileMenuVisible && (
-                    <div className="profile-menu">
-                        <Link to="/Profile">View Profile</Link>
-                        <Link to="/Bookings">My Bookings</Link>
-                        <Link to="/Settings"> settings</Link>
-                        <Link to="/Reviews">My reviews</Link>
-                        <button onClick={handleLogout} className='logout-button'>Logout</button>
+                    <div 
+                        className='profile-icon'
+                        onClick={() => setProfileMenuVisible(!profileMenuVisible)}
+                    >
+                        <img 
+                            src={profileIcon} 
+                            alt="Profile" 
+                            className="profile-image"
+                        />
                     </div>
-                )}
+                    {profileMenuVisible && (
+                        <div className="profile-menu">
+                            <Link to="/profile">My Profile</Link>
+                            <Link to="/bookings">My Bookings</Link>
+                            <Link to="/settings">Settings</Link>
+                            <Link to="/reviews">My Reviews</Link>
+                            <button onClick={handleLogout}>Logout</button>
+                        </div>
+                    )}
                 </li>
             )}
             </ul>
@@ -61,5 +68,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
-
