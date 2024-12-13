@@ -1,121 +1,139 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import './AddRestaurant.css';
 
 const AddRestaurant = () => {
-    const [name, setName] = useState("");
-    const [location, setLocation] = useState("");
-    const [cuisine, setCuisine] = useState("");
-    const [maxCapacity, setMaxCapacity] = useState("");
-    const [halal, setHalal] = useState("No");
-    const [minHealthRating, setMinHealthRating] = useState("");
-    const [dietary, setDietary] = useState("");
-    const [message, setMessage] = useState("");
+    const [formData, setFormData] = useState({
+        name: "",
+        location: "",
+        cuisine: "",
+        maxcapacity: "",
+        halal: "",
+        minHealthRating: "",
+        dietary: ""
+    });
+    const navigate = useNavigate();
 
-    const navigate = useNavigate(); 
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+    };
 
-    const addRestaurant = () => {
-        fetch('http://127.0.0.1:5005/addrestaurant', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                name,
-                location,
-                cuisine,
-                max_capacity: parseInt(maxCapacity, 10),
-                halal,
-                min_health_rating: minHealthRating,
-                dietary,
-            }),
-        })
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error('Failed to add restaurant');
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const token = localStorage.getItem("authToken");
+        
+        if (!token) {
+            alert("Please log in to add a restaurant.");
+            navigate("/Login");
+            return;
+        }
+        try {
+            // Decode the JWT token to get the user ID
+            const tokenPayload = JSON.parse(atob(token.split('.')[1]));
+            const userId = tokenPayload.id;
+
+            const response = await fetch("http://127.0.0.1:5005/addresturant", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    ...formData,
+                    owner_id: userId 
+                })
+            });
+
+            if (response.ok) {
+                const message = await response.text();
+                alert(message);
+                navigate("/Restaurants");
+            } else {
+                const error = await response.text();
+                alert(`Error: ${error}`);
             }
-            setMessage('Restaurant added successfully');
-            alert('Restaurant added successfully');
-
-            navigate('/lists');  
-        })
-        .catch((error) => {
-            setMessage(`Error: ${error.message}`);
-            alert(error.message);
-        });
-    }
+        } catch (err) {
+            console.error("Error adding restaurant:", err);
+            alert("An error occurred. Please try again later.");
+        }
+    };
 
     return (
-        <div>
+        <div className="add-restaurant-container">
             <h1>Add a Restaurant</h1>
-            <form
-                onSubmit={(e) => {
-                    e.preventDefault(); 
-                    addRestaurant();
-                }}
-            >
-                <label>Restaurant Name:</label>
-                <input
-                    type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                />
-                <br />
-
-                <label>Location:</label>
-                <input
-                    type="text"
-                    value={location}
-                    onChange={(e) => setLocation(e.target.value)}
-                />
-                <br />
-
-                <label>Cuisine:</label>
-                <input
-                    type="text"
-                    value={cuisine}
-                    onChange={(e) => setCuisine(e.target.value)}
-                />
-                <br />
-
-                <label>Max Capacity:</label>
-                <input
-                    type="number"
-                    value={maxCapacity}
-                    onChange={(e) => setMaxCapacity(e.target.value)}
-                />
-                <br />
-
-                <label>Halal:</label>
-                <select
-                    value={halal}
-                    onChange={(e) => setHalal(e.target.value)}
-                >
-                    <option value="Yes">Yes</option>
-                    <option value="No">No</option>
-                </select>
-                <br />
-
-                <label>Minimum Health Rating:</label>
-                <input
-                    type="text"
-                    value={minHealthRating}
-                    onChange={(e) => setMinHealthRating(e.target.value)}
-                />
-                <br />
-
-                <label>Dietary Options:</label>
-                <input
-                    type="text"
-                    value={dietary}
-                    onChange={(e) => setDietary(e.target.value)}
-                />
-                <br />
-
+            <form onSubmit={handleSubmit} className="add-restaurant-form">
+                <label>
+                    Name:
+                    <input
+                        type="text"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleInputChange}
+                        required
+                    />
+                </label>
+                <label>
+                    Location:
+                    <input
+                        type="text"
+                        name="location"
+                        value={formData.location}
+                        onChange={handleInputChange}
+                        required
+                    />
+                </label>
+                <label>
+                    Cuisine:
+                    <input
+                        type="text"
+                        name="cuisine"
+                        value={formData.cuisine}
+                        onChange={handleInputChange}
+                        required
+                    />
+                </label>
+                <label>
+                    Maximum Capacity:
+                    <input
+                        type="number"
+                        name="maxcapacity"
+                        value={formData.maxcapacity}
+                        onChange={handleInputChange}
+                        required
+                    />
+                </label>
+                <label>
+                    Halal:
+                    <input
+                        type="text"
+                        name="halal"
+                        value={formData.halal}
+                        onChange={handleInputChange}
+                    />
+                </label>
+                <label>
+                    Minimum Health Rating:
+                    <input
+                        type="text"
+                        name="minHealthRating"
+                        value={formData.minHealthRating}
+                        onChange={handleInputChange}
+                    />
+                </label>
+                <label>
+                    Dietary Options:
+                    <input
+                        type="text"
+                        name="dietary"
+                        value={formData.dietary}
+                        onChange={handleInputChange}
+                    />
+                </label>
                 <button type="submit">Add Restaurant</button>
             </form>
-            {message && <p>{message}</p>}
         </div>
     );
-}
+};
 
 export default AddRestaurant;

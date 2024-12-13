@@ -1,28 +1,31 @@
 import React from "react";
-import { BrowserRouter, Route, Routes } from 'react-router-dom'; // Import necessary router components
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'; 
 import Navbar from "./Components/Navbar";
-import Home from './Components/Home'; // Assuming these components are in the 'Components' folder
-import Lists from './Components/Lists';
-import Contact from './Components/Contact';
+import Home from './Components/Home'; // These components are in the 'Components' folder
+import Restaurant from './Components/Restaurants';
 import LoginForm from './Components/Login';
 import RegistrationForm from './Components/Register';
+import Footer from "./Components/Footer";
+import AddRestaurant from './Components/AddResturant'; // Add this import if AddRestaurant is a valid component
 
 function App() {
   return (
-    <BrowserRouter>
+    <Router>
       <div>
         <Navbar />
         <div style={{ height: '200vh', paddingTop: '70px' }}>
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/lists" element={<Lists />} />
-            <Route path="/contact" element={<Contact />} />
+            <Route path="/restaurant" element={<Restaurant />} />
             <Route path="/login" element={<LoginForm />} />
             <Route path="/register" element={<RegistrationForm />} />
+            <Route path="*" element={<div>404 - Page Not Found</div>} />
+            <Route path="/AddRestaurant" element={<AddRestaurant />} />
           </Routes>
         </div>
+        <Footer />
       </div>
-    </BrowserRouter>
+    </Router>
   );
 }
 
