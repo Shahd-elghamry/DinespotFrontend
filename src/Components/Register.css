@@ -61,6 +61,13 @@ body::before {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
+.select-user-type h2 {
+    font-size: 1.8rem;
+    margin-bottom: 30px;
+    color: #001f3f;
+    font-weight: bold;
+}
+
 .userType-button {
     padding: 20px 40px;
     margin: 20px;
