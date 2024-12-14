@@ -6,7 +6,8 @@ import Restaurant from './Components/Restaurants';
 import LoginForm from './Components/Login';
 import RegistrationForm from './Components/Register';
 import Footer from "./Components/Footer";
-import AddRestaurant from './Components/AddResturant'; // Add this import if AddRestaurant is a valid component
+import AddRestaurant from './Components/AddResturant'; 
+import NotFound from './Components/NotFound'; 
 
 function App() {
   return (
@@ -19,8 +20,8 @@ function App() {
             <Route path="/restaurant" element={<Restaurant />} />
             <Route path="/login" element={<LoginForm />} />
             <Route path="/register" element={<RegistrationForm />} />
-            <Route path="*" element={<div>404 - Page Not Found</div>} />
-            <Route path="/AddRestaurant" element={<AddRestaurant />} />
+            <Route path="/addRestaurant" element={<AddRestaurant />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </div>
         <Footer />
