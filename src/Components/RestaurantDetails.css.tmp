@@ -1,0 +1,23 @@
+.restaurant-details-container {
+    max-width: 1200px;
+    margin: 70px auto 0;
+    padding: 2rem;
+    min-height: calc(100vh - 70px);
+    display: flex;
+    flex-direction: column;
+}
+
+.restaurant-name {
+    font-size: 2.5rem;
+    color: #000;
+    margin: 0;
+    text-align: center;
+}
+
+.rating-section {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    justify-content: center;
+}

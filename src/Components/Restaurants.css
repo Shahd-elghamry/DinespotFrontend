@@ -1,16 +1,19 @@
 .Restaurants-Title{
     text-align: center;
-    color: #000000;
-    margin-bottom: 30px;
+    color: #001f3f;
+    margin-bottom: 2rem;
     font-weight: bold;
     font-size: 2.5rem;
 }   
 
 .restaurants-container {
-    max-width: 1200px;
-    margin: 0 auto;
     padding: 20px;
-    background: transparent;
+    max-width: 1200px;
+    margin: 70px auto 0; /* Add top margin to account for navbar height */
+    width: 100%;
+    min-height: calc(100vh - 70px); /* Subtract navbar height */
+    display: flex;
+    flex-direction: column;
 }
 
 .restaurants-container h1 {
@@ -22,22 +25,29 @@
 .search-bar {
     display: flex;
     justify-content: center;
-    margin-bottom: 20px;
+    margin-bottom: 1.5rem;
 }
 
 .search-bar input {
     width: 100%;
     max-width: 600px;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 1em;
+    padding: 12px 20px;
+    border: 2px solid #ddd;
+    border-radius: 25px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.search-bar input:focus {
+    outline: none;
+    border-color: #001f3f;
 }
 
 .filters-container {
     display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    justify-content: center;
     flex-wrap: wrap;
 }
 
@@ -50,10 +60,12 @@
 }
 
 .filters-container select {
-    padding: 8px;
-    border-radius: 4px;
+    padding: 8px 16px;
     border: 1px solid #ddd;
-    background: white;
+    border-radius: 20px;
+    background-color: white;
+    cursor: pointer;
+    min-width: 150px;
 }
 
 .restaurants-grid {
@@ -65,10 +77,12 @@
 }
 
 .restaurants-list {
+    flex: 1;
     display: flex;
     justify-content: center;
-    align-items: center;
-    min-height: 300px;
+    align-items: flex-start; /* Change from center to flex-start */
+    padding-bottom: 40px; /* Add padding at the bottom */
+    margin-bottom: 40px; /* Add space above footer */
 }
 
 .restaurant-card {
