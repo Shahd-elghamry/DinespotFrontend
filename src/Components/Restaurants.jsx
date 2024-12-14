@@ -77,7 +77,7 @@ const RestaurantsComponent = () => {
 
     return (
         <div className="restaurants-container">
-            <h1>Find Your Perfect Dining Experience</h1>
+            <h1 className="Restaurants-Title">Find Your Perfect Dining Experience</h1>
 
             {/* Search Bar */}
             <div className="search-bar">
