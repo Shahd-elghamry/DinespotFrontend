@@ -48,7 +48,7 @@ const AddRestaurant = () => {
             if (response.ok) {
                 const message = await response.text();
                 alert(message);
-                navigate("/Restaurants");
+                navigate("/restaurant");
             } else {
                 const error = await response.text();
                 alert(`Error: ${error}`);
@@ -105,12 +105,15 @@ const AddRestaurant = () => {
                 </label>
                 <label>
                     Halal:
-                    <input
-                        type="text"
+                    <select
                         name="halal"
                         value={formData.halal}
                         onChange={handleInputChange}
-                    />
+                    >
+                        <option value="">Select Halal Status</option>
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                    </select>
                 </label>
                 <label>
                     Minimum Health Rating:

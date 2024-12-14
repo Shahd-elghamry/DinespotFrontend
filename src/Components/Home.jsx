@@ -68,12 +68,10 @@ const Home = () => {
             .then((data) => setRestaurants(data))
             .catch((error) => console.log("Error fetching restaurants:", error));
 
-        // Slideshow interval
         const interval = setInterval(() => {
             setCurrentIndex((prevIndex) => (prevIndex + 1) % slides.length);
         }, 5000);
 
-        // Intersection Observer for scroll animations
         const observer = new IntersectionObserver(
             (entries) => {
                 entries.forEach(entry => {
@@ -97,7 +95,6 @@ const Home = () => {
 
     return (
         <div className="home-container">
-            {/* Slideshow Section */}
             <div className="slideshow">
                 {slides.map((slide, index) => (
                     <div
@@ -124,7 +121,7 @@ const Home = () => {
                 <div className="section-header">
                     <h2>Featured Restaurants</h2>
                     {restaurants.length > 5 && (
-                        <Link to="/Restaurants" className="see-more-btn">
+                        <Link to="/restaurant" className="see-more-btn">
                             See All
                         </Link>
                     )}
@@ -134,14 +131,29 @@ const Home = () => {
                     <div className="restaurant-row">
                         {restaurants.slice(0, 5).map((restaurant) => (
                             <div key={restaurant.id} className="restaurant-card">
-                                <img
-                                    src={restaurant.image || 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4'}
-                                    alt={restaurant.name}
-                                    className="restaurant-image"
-                                />
-                                <div className="restaurant-info">
-                                    <h3>{restaurant.name}</h3>
-                                    <p>{restaurant.description}</p>
+                                <div className="restaurant-preview">
+                                    <img
+                                        src={restaurant.image || 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4'}
+                                        alt={restaurant.name}
+                                        className="restaurant-image"
+                                    />
+                                    <h2>{restaurant.name}</h2>
+                                </div>
+                                <div className="restaurant-details">
+                                    <img
+                                        src={restaurant.image || 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4'}
+                                        alt={restaurant.name}
+                                        className="restaurant-image-large"
+                                    />
+                                    <h2>{restaurant.name}</h2>
+                                    <div className="details-content">
+                                        <p><strong>Location:</strong> {restaurant.location}</p>
+                                        <p><strong>Cuisine:</strong> {restaurant.cuisine}</p>
+                                        <p><strong>Maximum Capacity:</strong> {restaurant.maxcapacity}</p>
+                                        <p><strong>Halal:</strong> {restaurant.halal === "yes" ? 'Yes' : 'No'}</p>
+                                        <p><strong>Health Rating:</strong> {restaurant.minHealthRating || 'N/A'}</p>
+                                        <p><strong>Dietary Options:</strong> {restaurant.dietary || 'None'}</p>
+                                    </div>
                                 </div>
                             </div>
                         ))}

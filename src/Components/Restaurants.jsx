@@ -12,7 +12,6 @@ const RestaurantsComponent = () => {
     const [cuisine, setCuisine] = useState("");
     const [halal, setHalal] = useState("");
     const [dietary, setDietary] = useState("");
-    const [availableCapacity, setAvailableCapacity] = useState("");
 
     // Locations and cuisines
     const locations = ["New Cairo", "Masr El gedida", "Zayed", "Maadi", "Other"];
@@ -28,47 +27,48 @@ const RestaurantsComponent = () => {
             const queryParams = new URLSearchParams();
             
             // Add filters to query parameters
-            if (searchTerm) queryParams.append('searchTerm', searchTerm);
             if (location && location !== "Other") queryParams.append('location', location);
             if (cuisine && cuisine !== "Other") queryParams.append('cuisine', cuisine);
             if (dietary && dietary !== "Other") queryParams.append('dietary', dietary);
-            if (halal === "yes") queryParams.append('halal', 'true');
-            if (availableCapacity) queryParams.append('availableCapacity', availableCapacity);
+            if (halal) queryParams.append('halal', halal);
+            if (searchTerm) queryParams.append('searchTerm', searchTerm);
             
             // Construct the full URL with query parameters
             const url = `http://127.0.0.1:5005/resturant/search?${queryParams.toString()}`;
 
-            console.log("Fetching URL:", url); // Log the exact URL being called
+            console.log("Fetching URL:", url);
 
             const response = await fetch(url, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }
             });
 
-            console.log("Response status:", response.status); // Log response status
+            console.log("Response status:", response.status);
 
             if (!response.ok) {
-                // Try to get more details about the error
                 const errorText = await response.text();
-                console.error("Error response text:", errorText);
-                throw new Error(`Failed to fetch restaurants. Status: ${response.status}, Message: ${errorText}`);
+                throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
             }
 
             const data = await response.json();
-            console.log("Received data:", data); // Log received data
+            console.log("Received data:", data);
             
-            setRestaurants(data);
+            // Filter restaurants based on halal status if selected
+            const filteredData = halal === "yes" 
+                ? data.filter(restaurant => restaurant.halal === "yes")
+                : data;
+            
+            setRestaurants(filteredData);
         } catch (error) {
-            console.error("Complete error details:", error);
+            console.error("Error fetching restaurants:", error);
             setMessage(`Error fetching restaurants: ${error.message}`);
             setRestaurants([]);
         } finally {
             setLoading(false);
         }
-    }, [searchTerm, location, cuisine, dietary, halal, availableCapacity]);
+    }, [location, cuisine, dietary, halal, searchTerm]);
 
     // Trigger search when filters change
     useEffect(() => {
@@ -113,14 +113,6 @@ const RestaurantsComponent = () => {
                     ))}
                 </select>
 
-                {/* Available Capacity */}
-                <input 
-                    type="number" 
-                    placeholder="Min. Available Capacity" 
-                    value={availableCapacity}
-                    onChange={(e) => setAvailableCapacity(e.target.value)}
-                />
-
                 {/* Halal Filter */}
                 <select 
                     value={halal} 
@@ -154,12 +146,30 @@ const RestaurantsComponent = () => {
                 ) : (
                     restaurants.map((restaurant, index) => (
                         <div key={index} className="restaurant-card">
-                            <h2>{restaurant.name}</h2>
-                            <p>Location: {restaurant.location}</p>
-                            <p>Cuisine: {restaurant.cuisine}</p>
-                            <p>Available Capacity: {restaurant.availableCapacity}</p>
-                            <p>Halal: {restaurant.halal ? 'Yes' : 'No'}</p>
-                            <p>Dietary Options: {restaurant.dietary}</p>
+                            <div className="restaurant-preview">
+                                <img 
+                                    src={restaurant.image || 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4'} 
+                                    alt={restaurant.name} 
+                                    className="restaurant-image"
+                                />
+                                <h2>{restaurant.name}</h2>
+                            </div>
+                            <div className="restaurant-details">
+                                <img 
+                                    src={restaurant.image || 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4'} 
+                                    alt={restaurant.name} 
+                                    className="restaurant-image-large"
+                                />
+                                <h2>{restaurant.name}</h2>
+                                <div className="details-content">
+                                    <p><strong>Location:</strong> {restaurant.location}</p>
+                                    <p><strong>Cuisine:</strong> {restaurant.cuisine}</p>
+                                    <p><strong>Maximum Capacity:</strong> {restaurant.maxcapacity}</p>
+                                    <p><strong>Halal:</strong> {restaurant.halal === "yes" ? 'Yes' : 'No'}</p>
+                                    <p><strong>Health Rating:</strong> {restaurant.minHealthRating || 'N/A'}</p>
+                                    <p><strong>Dietary Options:</strong> {restaurant.dietary || 'None'}</p>
+                                </div>
+                            </div>
                         </div>
                     ))
                 )}
