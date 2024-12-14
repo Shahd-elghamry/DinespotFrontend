@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './PopupStyle.css';
 
+// eslint-disable-next-line no-unused-vars
 const BASE_URL = 'http://127.0.0.1:5005';
 
 const Popup = ({ type, closePopup, token }) => {
