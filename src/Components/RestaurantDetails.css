@@ -1,7 +1,7 @@
 .restaurant-details-container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 40px 20px;
+    padding: 20px;
 }
 
 .restaurant-name {
@@ -132,4 +132,151 @@
 .book-button:focus {
     outline: none;
     box-shadow: 0 0 0 2px rgba(0, 31, 63, 0.3);
+}
+
+.reviews-section {
+    margin-top: 40px;
+    padding: 20px;
+    background-color: #f5f5dc;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.reviews-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.reviews-header h2 {
+    color: #001f3f;
+    font-size: 24px;
+    margin: 0;
+}
+
+.add-review-button {
+    background-color: #001f3f;
+    color: #f5f5dc;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.add-review-button:hover {
+    background-color: #174f86;
+    transform: scale(1.02);
+}
+
+.review-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.review-item {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.reviewer-name {
+    font-weight: bold;
+    color: #001f3f;
+}
+
+.review-date {
+    color: #666;
+    font-size: 0.9em;
+}
+
+.review-rating {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: #f39c12;
+    margin-bottom: 10px;
+}
+
+.review-content {
+    color: #333;
+    line-height: 1.5;
+}
+
+.review-form {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.review-form textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #001f3f;
+    border-radius: 5px;
+    margin: 10px 0;
+    min-height: 100px;
+    resize: vertical;
+}
+
+.rating-input {
+    display: flex;
+    gap: 10px;
+    margin: 10px 0;
+}
+
+.rating-input label {
+    color: #001f3f;
+    font-weight: bold;
+}
+
+.rating-input select {
+    padding: 5px;
+    border: 1px solid #001f3f;
+    border-radius: 5px;
+}
+
+.submit-review-button {
+    background-color: #001f3f;
+    color: #f5f5dc;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.submit-review-button:hover {
+    background-color: #174f86;
+}
+
+.no-reviews {
+    text-align: center;
+    color: #666;
+    padding: 20px;
+}
+
+.error-message {
+    color: #dc3545;
+    margin: 10px 0;
+    text-align: center;
+}
+
+.success-message {
+    color: #28a745;
+    margin: 10px 0;
+    text-align: center;
 }
