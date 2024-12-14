@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'; 
-import { AuthProvider, PrivateRoute } from './AuthContext';
+import { AuthProvider, PrivateRoute } from './AuthContext.js';
 import Navbar from "./Components/Navbar";
 import Home from './Components/Home';
 import Restaurant from './Components/Restaurants';
