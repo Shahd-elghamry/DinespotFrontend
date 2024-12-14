@@ -1,3 +1,105 @@
+.restaurant-page {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.filters-section {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.search-input,
+.filter-select {
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.search-input {
+    flex: 1;
+    min-width: 200px;
+}
+
+.filter-select {
+    min-width: 150px;
+}
+
+.restaurants-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.restaurant-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.2s;
+    text-decoration: none;
+    color: inherit;
+    background: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.restaurant-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.restaurant-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.restaurant-info {
+    padding: 1rem;
+}
+
+.restaurant-info h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.2rem;
+}
+
+.cuisine,
+.location {
+    margin: 0.25rem 0;
+    color: #666;
+}
+
+.rating {
+    margin: 0.5rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.stars {
+    color: #ffd700;
+}
+
+.rating-number {
+    color: #666;
+}
+
+.dietary-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.dietary-tag {
+    background: #f0f0f0;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    color: #666;
+}
+
 .Restaurants-Title{
     text-align: center;
     color: #000000;

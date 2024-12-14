@@ -12,6 +12,7 @@ import NotFound from './Components/NotFound';
 import RestaurantDetails from './Components/RestaurantDetails'; 
 import BookingPage from './Components/BookingPage';
 import EditProfile from './Components/EditProfile';
+import FAQ from './Pages/FAQ';
 import './App.css';
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
               <Route path="/register" element={<RegistrationForm />} />
               <Route path="/addRestaurant" element={<AddRestaurant />} />
               <Route path="/booking/:id" element={<BookingPage />} />
+              <Route path="/faq" element={<FAQ />} />
               <Route path="/edit-profile" element={
                 <PrivateRoute>
                   <EditProfile />

@@ -3,6 +3,9 @@ import { Link } from 'react-router-dom';
 import { AuthContext } from '../AuthContext.js';
 import './Navbar.css'; 
 import profileIcon from '../photos/profileIcon.png';
+import { FaUser, FaEdit, FaBookmark, FaUtensils, FaCog, FaSignOutAlt, FaTrashAlt } from 'react-icons/fa';
+import { MdDashboard } from 'react-icons/md';
+import { IoMdAdd } from 'react-icons/io';
 
 const Navbar = () => {
     const { isAuthenticated, logout, userType, setUserType } = useContext(AuthContext);
@@ -61,16 +64,28 @@ const Navbar = () => {
 
         const commonItems = (
             <>
-                <Link to="/profile">My Profile</Link>
-                <Link to="/edit-profile" className="nav-link">Edit Profile</Link>
+                <Link to="/profile" className="menu-item">
+                    <FaUser className="menu-icon" />
+                    <span>My Profile</span>
+                </Link>
+                <Link to="/edit-profile" className="menu-item">
+                    <FaEdit className="menu-icon" />
+                    <span>Edit Profile</span>
+                </Link>
             </>
         );
 
         const bottomItems = (
             <>
                 <div className="menu-divider"></div>
-                <button className="delete-account-btn" onClick={handleDeleteAccount}>Delete Account</button>
-                <button onClick={handleLogout}>Logout</button>
+                <button className="menu-item delete-account-btn" onClick={handleDeleteAccount}>
+                    <FaTrashAlt className="menu-icon" />
+                    <span>Delete Account</span>
+                </button>
+                <button className="menu-item" onClick={handleLogout}>
+                    <FaSignOutAlt className="menu-icon" />
+                    <span>Logout</span>
+                </button>
             </>
         );
 
@@ -79,7 +94,10 @@ const Navbar = () => {
                 return (
                     <>
                         {commonItems}
-                        <Link to="/bookings">My Bookings</Link>
+                        <Link to="/bookings" className="menu-item">
+                            <FaBookmark className="menu-icon" />
+                            <span>My Bookings</span>
+                        </Link>
                         {bottomItems}
                     </>
                 );
@@ -87,7 +105,10 @@ const Navbar = () => {
                 return (
                     <>
                         {commonItems}
-                        <Link to="/my-restaurants">My Restaurants</Link>
+                        <Link to="/my-restaurants" className="menu-item">
+                            <FaUtensils className="menu-icon" />
+                            <span>My Restaurants</span>
+                        </Link>
                         {bottomItems}
                     </>
                 );
@@ -95,7 +116,10 @@ const Navbar = () => {
                 return (
                     <>
                         {commonItems}
-                        <Link to="/control-panel">Control Panel</Link>
+                        <Link to="/control-panel" className="menu-item">
+                            <MdDashboard className="menu-icon" />
+                            <span>Control Panel</span>
+                        </Link>
                         {bottomItems}
                     </>
                 );

@@ -1,75 +1,138 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './PopupStyle.css';
 
 const BASE_URL = 'http://127.0.0.1:5005';
 
-const Popup = ({ type, closePopup, token }) => {
+const Popup = ({ type, closePopup }) => {
+  const navigate = useNavigate();
   const [restaurants, setRestaurants] = useState([]);
   const [selectedRestaurant, setSelectedRestaurant] = useState('');
   const [email, setEmail] = useState('');
   const [question, setQuestion] = useState('');
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    if (token) {
-      try {
-        const decoded = JSON.parse(atob(token.split('.')[1])); // Decode JWT payload
-        setEmail(decoded.email || ''); // Set the email if available
-      } catch (err) {
-        console.error('Error decoding token:', err);
-      }
-    }
-  }, [token]);
+  const [bookingDate, setBookingDate] = useState('');
+  const [bookingTime, setBookingTime] = useState('');
+  const [numberOfPeople, setNumberOfPeople] = useState(1);
+  const [showBookingForm, setShowBookingForm] = useState(false);
 
   useEffect(() => {
     if (type === 'booking') {
       setLoading(true);
-      fetch(`${BASE_URL}/restaurants`)
+      fetch(`${BASE_URL}/resturant`)
         .then(response => {
           if (!response.ok) {
             throw new Error('Failed to fetch restaurants');
           }
           return response.json();
         })
-        .then((data) => setRestaurants(data))
+        .then((data) => {
+          if (!data || data.length === 0) {
+            setMessage('No restaurants available at the moment.');
+          } else {
+            setRestaurants(data);
+            setMessage('');
+          }
+        })
         .catch((error) => {
           console.error('Error fetching restaurants:', error);
-          setMessage(`Error fetching restaurants: ${error.message}`);
+          setMessage('Unable to load restaurants. Please try again later.');
         })
         .finally(() => setLoading(false));
+    } else if (type === 'contact') {
+      const token = localStorage.getItem('authToken');
+      if (token) {
+        try {
+          const tokenParts = token.split('.');
+          const payload = JSON.parse(atob(tokenParts[1]));
+          setEmail(payload.email || '');
+        } catch (err) {
+          console.error('Error decoding token:', err);
+        }
+      }
     }
   }, [type]);
+
+  const handleRestaurantSelect = (e) => {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      setMessage('Please log in first to book a restaurant');
+      setTimeout(() => {
+        navigate('/login');
+      }, 1500);
+      return;
+    }
+    setSelectedRestaurant(e.target.value);
+    setShowBookingForm(true);
+  };
 
   const handleBookingSubmit = (e) => {
     e.preventDefault();
 
-    if (!selectedRestaurant) {
-      setMessage('Please select a restaurant.');
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      setMessage('Please log in first to book a restaurant');
+      setTimeout(() => {
+        navigate('/login');
+      }, 1500);
+      return;
+    }
+
+    if (!selectedRestaurant || !bookingDate || !bookingTime || !numberOfPeople) {
+      setMessage('Please fill in all booking details.');
+      return;
+    }
+
+    const selectedRestaurantData = restaurants.find(r => r.id === parseInt(selectedRestaurant));
+    if (!selectedRestaurantData) {
+      setMessage('Please select a valid restaurant.');
       return;
     }
 
     setLoading(true);
-    fetch(`${BASE_URL}/bookings`, {
-      method: 'POST',
+    fetch(`${BASE_URL}/resturant/book`, {
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
       },
-      body: JSON.stringify({ restaurant: selectedRestaurant }),
+      body: JSON.stringify({
+        name: selectedRestaurantData.name,
+        date: bookingDate,
+        time: bookingTime,
+        quantity: numberOfPeople,
+        special_requests: ''
+      }),
     })
       .then(response => {
         if (!response.ok) {
-          throw new Error('Failed to book the restaurant');
+          if (response.status === 401) {
+            localStorage.removeItem('authToken');
+            throw new Error('Please log in to book a restaurant');
+          }
+          return response.text().then(text => {
+            throw new Error(text || 'Failed to book the restaurant');
+          });
         }
-        return response.json();
+        return response.text();
       })
       .then((data) => {
-        setMessage('Booking successful');
+        setMessage('Booking successful! ' + data);
+        setShowBookingForm(false);
         setSelectedRestaurant('');
+        setBookingDate('');
+        setBookingTime('');
+        setNumberOfPeople(1);
       })
       .catch((error) => {
         console.error('Error booking restaurant:', error);
-        setMessage(`Error booking restaurant: ${error.message}`);
+        setMessage(error.message);
+        if (error.message.includes('Please log in')) {
+          setTimeout(() => {
+            navigate('/login');
+          }, 1500);
+        }
       })
       .finally(() => setLoading(false));
   };
@@ -78,7 +141,7 @@ const Popup = ({ type, closePopup, token }) => {
     e.preventDefault();
 
     if (!email || !question) {
-      setMessage('All fields (email and question) are required.');
+      alert('All fields are required.');
       return;
     }
     setLoading(true);
@@ -99,82 +162,118 @@ const Popup = ({ type, closePopup, token }) => {
         return response.json();
       })
       .then((data) => {
-        setMessage(data.message);
-        if (!token) setEmail(''); // Clear email only for guest users
+        alert('Message sent successfully!');
         setQuestion('');
+        if (!localStorage.getItem('authToken')) {
+          setEmail('');
+        }
+        closePopup(); // Close the popup after successful submission
       })
       .catch((error) => {
-        console.error('Error sending contact message:', error);
-        setMessage(`Error: ${error.message}`);
+        console.error('Error sending message:', error);
+        alert('Failed to send message. Please try again.');
       })
       .finally(() => setLoading(false));
-  };
-
-  const renderContent = () => {
-    switch (type) {
-      case 'booking':
-        return (
-          <>
-            <h3>Book a Restaurant</h3>
-            <form onSubmit={handleBookingSubmit}>
-              <label htmlFor="restaurant">Choose a Restaurant:</label>
-              <select
-                id="restaurant"
-                name="restaurant"
-                value={selectedRestaurant}
-                onChange={(e) => setSelectedRestaurant(e.target.value)}
-              >
-                <option value="">Select a restaurant</option>
-                {restaurants.map((restaurant) => (
-                  <option key={restaurant.id} value={restaurant.id}>
-                    {restaurant.name}
-                  </option>
-                ))}
-              </select>
-              <button type="submit" disabled={loading}>
-                {loading ? 'Booking...' : 'Book'}
-              </button>
-            </form>
-            {message && <p>{message}</p>}
-          </>
-        );
-      case 'contact':
-        return (
-          <>
-            <h3>Contact Us</h3>
-            <form onSubmit={handleContactSubmit}>
-              <label>Email:</label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-              <br />
-              <label>Your Question:</label>
-              <textarea
-                value={question}
-                onChange={(e) => setQuestion(e.target.value)}
-                required
-              />
-              <br />
-              <button type="submit" disabled={loading}>
-                {loading ? 'Sending...' : 'Send Message'}
-              </button>
-            </form>
-            {message && <p>{message}</p>}
-          </>
-        );
-      default:
-        return null;
-    }
   };
 
   return (
     <div className="popup-overlay">
       <div className="popup-content">
-        <button className="back-button" onClick={closePopup}>Back</button>
-        {renderContent()}
+        <button className="back-button" onClick={closePopup}>←</button>
+        {type === 'booking' ? (
+          <div>
+            <h3>Restaurant Booking</h3>
+            <form onSubmit={handleBookingSubmit}>
+              <label>
+                Select Restaurant:
+                <select 
+                  value={selectedRestaurant} 
+                  onChange={handleRestaurantSelect}
+                  required
+                >
+                  <option value="">Choose a restaurant</option>
+                  {restaurants.map((restaurant) => (
+                    <option key={restaurant.id} value={restaurant.id}>
+                      {restaurant.name}
+                    </option>
+                  ))}
+                </select>
+              </label>
+
+              {showBookingForm && (
+                <>
+                  <label>
+                    Date:
+                    <input
+                      type="date"
+                      value={bookingDate}
+                      onChange={(e) => setBookingDate(e.target.value)}
+                      min={new Date().toISOString().split('T')[0]}
+                      required
+                    />
+                  </label>
+
+                  <label>
+                    Time:
+                    <input
+                      type="time"
+                      value={bookingTime}
+                      onChange={(e) => setBookingTime(e.target.value)}
+                      required
+                    />
+                  </label>
+
+                  <label>
+                    Number of People:
+                    <input
+                      type="number"
+                      value={numberOfPeople}
+                      onChange={(e) => setNumberOfPeople(parseInt(e.target.value))}
+                      min="1"
+                      max="20"
+                      required
+                    />
+                  </label>
+                </>
+              )}
+
+              {showBookingForm && (
+                <button type="submit" disabled={loading}>
+                  {loading ? 'Booking...' : 'Book Now'}
+                </button>
+              )}
+            </form>
+          </div>
+        ) : (
+          <div>
+            <h3>Contact Us</h3>
+            <form onSubmit={handleContactSubmit}>
+              {!localStorage.getItem('authToken') && (
+                <label>
+                  Email:
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+                </label>
+              )}
+              <label>
+                Question:
+                <textarea
+                  value={question}
+                  onChange={(e) => setQuestion(e.target.value)}
+                  required
+                />
+              </label>
+              <button type="submit" disabled={loading}>
+                {loading ? 'Sending...' : 'Send'}
+              </button>
+            </form>
+          </div>
+        )}
+        {message && <p className={message.includes('successful') ? 'success-message' : 'error-message'}>{message}</p>}
       </div>
     </div>
   );
