@@ -31,7 +31,6 @@ const RestaurantsComponent = () => {
             if (cuisine && cuisine !== "Other") queryParams.append('cuisine', cuisine);
             if (dietary && dietary !== "Other") queryParams.append('dietary', dietary);
             if (halal) queryParams.append('halal', halal);
-            if (searchTerm) queryParams.append('searchTerm', searchTerm);
             
             // Construct the full URL with query parameters
             const url = `http://127.0.0.1:5005/resturant/search?${queryParams.toString()}`;
@@ -68,12 +67,19 @@ const RestaurantsComponent = () => {
         } finally {
             setLoading(false);
         }
-    }, [location, cuisine, dietary, halal, searchTerm]);
+    }, [location, cuisine, dietary, halal]);
 
     // Trigger search when filters change
     useEffect(() => {
         fetchRestaurants();
     }, [fetchRestaurants]);
+
+    // Filter the restaurants based on search term (name only)
+    const filteredRestaurants = restaurants.filter(restaurant => {
+        const searchMatch = searchTerm.trim() === '' || 
+            restaurant.name.toLowerCase().includes(searchTerm.toLowerCase());
+        return searchMatch;
+    });
 
     return (
         <div className="restaurants-container">
@@ -141,10 +147,14 @@ const RestaurantsComponent = () => {
 
             {/* Restaurants List */}
             <div className="restaurants-list">
-                {restaurants.length === 0 ? (
+                {loading ? (
+                    <p>Loading restaurants...</p>
+                ) : message ? (
+                    <p className="error-message">{message}</p>
+                ) : filteredRestaurants.length === 0 ? (
                     <p>No restaurants match your criteria.</p>
                 ) : (
-                    restaurants.map((restaurant, index) => (
+                    filteredRestaurants.map((restaurant, index) => (
                         <div key={index} className="restaurant-card">
                             <div className="restaurant-preview">
                                 <img 
