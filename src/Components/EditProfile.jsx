@@ -12,8 +12,6 @@ const EditProfile = () => {
         password: '',
         phonenum: ''
     });
-    const [message, setMessage] = useState('');
-    const [error, setError] = useState('');
 
     useEffect(() => {
         const authToken = localStorage.getItem('authToken');
@@ -49,7 +47,7 @@ const EditProfile = () => {
         })
         .catch(err => {
             console.error('Error fetching user data:', err);
-            setError('Failed to load user data. Please try logging in again.');
+            alert('Failed to load user data. Please try logging in again.');
             setTimeout(() => navigate('/login'), 2000);
         });
     }, [navigate]);
@@ -64,8 +62,6 @@ const EditProfile = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setMessage('');
-        setError('');
 
         const authToken = localStorage.getItem('authToken');
         const userId = localStorage.getItem('userId');
@@ -94,7 +90,7 @@ const EditProfile = () => {
             console.log('Update response:', responseText);
 
             if (response.ok) {
-                setMessage('Profile updated successfully!');
+                alert('Profile updated successfully!');
                 localStorage.setItem('username', formData.username);
                 localStorage.setItem('email', formData.email);
                 
@@ -102,19 +98,16 @@ const EditProfile = () => {
                     navigate('/');
                 }, 1500);
             } else {
-                setError(responseText || 'Failed to update profile');
+                alert(responseText || 'Failed to update profile');
             }
         } catch (err) {
             console.error('Error updating profile:', err);
-            setError(err.message || 'Failed to update profile');
+            alert(err.message || 'Failed to update profile');
         }
     };
 
     return (
         <div className="edit-profile-container">
-            {error && <div className="error-message">{error}</div>}
-            {message && <div className="success-message">{message}</div>}
-            
             <form onSubmit={handleSubmit} className="edit-profile-form">
                 <button type="button" onClick={() => navigate('/')} className="back-button">
                     <FontAwesomeIcon icon={faArrowLeft} />
@@ -157,19 +150,16 @@ const EditProfile = () => {
                 <div className="form-group">
                     <label>Phone Number:</label>
                     <input
-                        type="text"
+                        type="tel"
                         name="phonenum"
                         value={formData.phonenum}
                         onChange={handleChange}
-                        placeholder="Enter 10-digit phone number"
+                        placeholder="Enter your phone number"
                     />
                 </div>
 
                 <div className="button-group">
                     <button type="submit" className="save-button">Save Changes</button>
-                    <button type="button" className="cancel-button" onClick={() => navigate('/')}>
-                        Cancel
-                    </button>
                 </div>
             </form>
         </div>
