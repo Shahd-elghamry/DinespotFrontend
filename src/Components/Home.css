@@ -1,0 +1,222 @@
+.home-container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    min-height: 100vh;
+    background-color: #f5f5dc;
+}
+
+/* Slideshow styles */
+.slideshow {
+    position: relative;
+    width: 100%;
+    height: 60vh;
+    overflow: hidden;
+}
+
+.slide {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.slide.active {
+    opacity: 1;
+}
+
+.slide-content {
+    text-align: center;
+    color: white;
+    background-color: rgba(0, 31, 63, 0.7);
+    padding: 2rem;
+    border-radius: 10px;
+    max-width: 80%;
+}
+
+.slide-content h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.slide-content p {
+    font-size: 1.2rem;
+}
+
+/* Featured Restaurants Section */
+.featured-restaurants {
+    padding: 2rem;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.featured-restaurants.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding: 0 1rem;
+}
+
+.section-header h2 {
+    color: #001f3f;
+    font-size: 2rem;
+    margin: 0;
+}
+
+.see-more-btn {
+    background-color: #001f3f;
+    color: #f5f5dc;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.see-more-btn:hover {
+    background-color: #003366;
+}
+
+/* Restaurant scroll container */
+.restaurant-scroll {
+    width: 100%;
+    overflow-x: auto;
+    padding: 1rem 0;
+}
+
+.restaurant-scroll::-webkit-scrollbar {
+    height: 8px;
+}
+
+.restaurant-scroll::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.restaurant-scroll::-webkit-scrollbar-thumb {
+    background: #001f3f;
+    border-radius: 4px;
+}
+
+.restaurant-scroll::-webkit-scrollbar-thumb:hover {
+    background: #003366;
+}
+
+.restaurant-row {
+    display: flex;
+    gap: 2rem;
+    padding: 0 1rem;
+    min-width: max-content;
+}
+
+.restaurant-card {
+    background: white;
+    border-radius: 12px;
+    height: 300px;
+    min-width: 280px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.restaurant-preview {
+    height: 100%;
+    position: relative;
+}
+
+.restaurant-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.restaurant-preview h2 {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: 0;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #333;
+    font-size: 1.2em;
+}
+
+.restaurant-details {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: white;
+    padding: 0;
+    opacity: 0;
+    transform: translateY(100%);
+    transition: all 0.3s ease;
+    overflow-y: auto;
+}
+
+.restaurant-card:hover .restaurant-details {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.restaurant-image-large {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.details-content {
+    padding: 20px;
+}
+
+.details-content p {
+    margin: 8px 0;
+    font-size: 0.9em;
+    color: #666;
+}
+
+.restaurant-details h2 {
+    margin: 0;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #333;
+    position: absolute;
+    top: 150px;
+    left: 0;
+    right: 0;
+}
+
+/* Scrollbar Styling */
+.restaurant-details::-webkit-scrollbar {
+    width: 6px;
+}
+
+.restaurant-details::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.restaurant-details::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 3px;
+}
+
+.restaurant-details::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}

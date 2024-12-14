@@ -1,24 +1,80 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom'; 
-
 import './Navbar.css'; 
+import profileIcon from '../photos/profileIcon.png';
 
 const Navbar = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [profileMenuVisible, setProfileMenuVisible] = useState(false);
+    const [username, setUsername] = useState('');
+    const [userType, setUserType] = useState('');
    
     useEffect(() => {
-        // Check if there is a token that is still valid / logged 
-        const userToken = localStorage.getItem("userToken");
-        if (userToken) {
+        const token = localStorage.getItem("authToken");
+        const storedUsername = localStorage.getItem("username");
+        const storedUserType = localStorage.getItem("userType");
+        
+        if (token) {
             setIsLoggedIn(true);
+            if (storedUsername) {
+                setUsername(storedUsername);
+            }
+            if (storedUserType) {
+                setUserType(storedUserType);
+            }
         }
     }, []);
 
     const handleLogout = () => {
-        // For the logout 
+        //for the logout
+        localStorage.removeItem("authToken");
+        localStorage.removeItem("userType");
+        localStorage.removeItem("username");
+        localStorage.removeItem("email");
         setIsLoggedIn(false);
-        localStorage.removeItem("userToken"); 
+        setProfileMenuVisible(false);
+        window.location.reload();
+    };
+
+    const canAddRestaurant = userType === 'restaurant_owner' || userType === 'admin';
+
+    const renderProfileMenuItems = () => {
+        const commonItems = (
+            <>
+                <Link to="/profile">My Profile</Link>
+                <Link to="/settings">Settings</Link>
+            </>
+        );
+
+        let roleSpecificItems = null;
+
+        switch(userType) {
+            case 'regular_user':
+                roleSpecificItems = (
+                    <Link to="/bookings">My Bookings</Link>
+                );
+                break;
+            case 'restaurant_owner':
+                roleSpecificItems = (
+                    <Link to="/my-restaurants">My Restaurants</Link>
+                );
+                break;
+            case 'admin':
+                roleSpecificItems = (
+                    <Link to="/control-panel">Control Panel</Link>
+                );
+                break;
+            default:
+                break;
+        }
+
+        return (
+            <>
+                {commonItems}
+                {roleSpecificItems}
+                <button onClick={handleLogout}>Logout</button>
+            </>
+        );
     };
 
     return (
@@ -28,31 +84,35 @@ const Navbar = () => {
             </div>
             <ul className="navbar-lists">
                 <li><Link to="/">Home</Link></li>
-                <li><Link to="/Restaurants">Restaurants</Link></li>
-                <li><Link to="/AddRestaurant">Add Restaurant</Link></li>
+                <li><Link to="/restaurant">Restaurants</Link></li>
+                {canAddRestaurant && (
+                    <li><Link to="/AddRestaurant">Add Restaurant</Link></li>
+                )}
             </ul>
             <ul className='navbar-auth'>
             {!isLoggedIn ? (
-                    <>
-                <li><Link to="/Login">Login</Link></li>
-                <li><Link to="/Register">Register</Link></li>
+                <>
+                    <li><Link to="/Login">Login</Link></li>
+                    <li><Link to="/Register">Register</Link></li>
                 </>
             ) : (
                 <li className="profile-section">
-                    <button 
-                    className='profile-button'
-                    onClick={() => setProfileMenuVisible(!profileMenuVisible)}>
-                        Profile
-                    </button>
-                {profileMenuVisible && (
-                    <div className="profile-menu">
-                        <Link to="/Profile">View Profile</Link>
-                        <Link to="/Bookings">My Bookings</Link>
-                        <Link to="/Settings"> settings</Link>
-                        <Link to="/Reviews">My reviews</Link>
-                        <button onClick={handleLogout} className='logout-button'>Logout</button>
+                    <div 
+                        className='profile-icon'
+                        onClick={() => setProfileMenuVisible(!profileMenuVisible)}
+                    >
+                        <img 
+                            src={profileIcon} 
+                            alt="Profile" 
+                            className="profile-image"
+                        />
+                        <span className="username">{username}</span>
                     </div>
-                )}
+                    {profileMenuVisible && (
+                        <div className="profile-menu">
+                            {renderProfileMenuItems()}
+                        </div>
+                    )}
                 </li>
             )}
             </ul>
@@ -61,5 +121,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
-

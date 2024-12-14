@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom'; 
+import './Login.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faApple, faGoogle } from '@fortawesome/free-brands-svg-icons';
 
 const LoginForm = () => {
     const [email, setEmail] = useState("");
@@ -9,91 +12,141 @@ const LoginForm = () => {
 
     const navigate = useNavigate();
 
-    const loginUser = () => {
-        fetch('http://127.0.0.1:5005/user/login', {
-            method: 'POST',
-            headers: { 'Content-type': 'application/json' },
-            body: JSON.stringify({ email, password }),
-            credentials: "include" // Ensure the cookie is sent with the request
-        })
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error('Invalid credentials');
-                }
-                return response.json();
-            })
-            .then((data) => {
-                alert(data.message);
-                navigate("/"); // Navigate to home after login
-            })
-            .catch((error) => {
-                setMessage(error.message);
-                // alert(error.message);
+    const loginUser = async () => {
+        try {
+            console.log('Attempting login with:', { email }); // Debug log
+
+            const response = await fetch('http://127.0.0.1:5005/user/login', {
+                method: 'POST',
+                headers: { 'Content-type': 'application/json' },
+                body: JSON.stringify({ email, password }),
+                credentials: "include"
             });
+
+            const data = await response.json();
+            console.log('Login response:', data); // Debug log
+
+            if (!response.ok) {
+                throw new Error(data.message || 'Login failed');
+            }
+
+            if (data.token) {
+                // Store the token and user info in localStorage
+                localStorage.setItem('authToken', data.token);
+                localStorage.setItem('userType', data.userType);
+                localStorage.setItem('username', data.username);
+                localStorage.setItem('email', data.email);
+                
+                console.log('Stored in localStorage:', {
+                    token: data.token,
+                    userType: data.userType,
+                    username: data.username,
+                    email: data.email
+                }); // Debug log
+
+                // Navigate to home first
+                navigate("/");
+                
+                // Then reload the page after a short delay
+                setTimeout(() => {
+                    window.location.reload();
+                }, 100);
+            }
+        } catch (error) {
+            console.error('Login error:', error); // Debug log
+            setMessage(error.message);
+        }
     };
 
-    const handleForgotPassword = () => {
-        fetch('http://127.0.0.1:5005/user/forgot-password', {
-            method: 'POST',
-            headers: { 'Content-type': 'application/json' },
-            body: JSON.stringify({ email }),
-            credentials: "include"
-        })
-        .then((response) => response.text())
-        .then((data) => setMessage(data))  // Display the response message from backend
-        .catch((error) => setMessage('An error occurred. Please try again.'));
+    const handleForgotPassword = async () => {
+        try {
+            const response = await fetch('http://127.0.0.1:5005/user/forgot-password', {
+                method: 'POST',
+                headers: { 'Content-type': 'application/json' },
+                body: JSON.stringify({ email }),
+                credentials: "include"
+            });
+            const data = await response.text();
+            setMessage(data);
+        } catch (error) {
+            setMessage('An error occurred. Please try again.');
+        }
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        loginUser();
+    };
+
+    const handleForgotPasswordSubmit = (e) => {
+        e.preventDefault();
+        handleForgotPassword();
     };
 
     return (
-        <div className="login-form">
-             <h1>{isForgotPassword ? "Forgot Password" : "Login"}</h1>
-
-             {!isForgotPassword ? (
-                // Login Form
-            <form
-                onSubmit={(e) => {
-                    e.preventDefault();
-                    loginUser();
-                }}
-            >
-                <label>Email:</label>
-                <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                />
-                <br />
-                <label>Password:</label>
-                <input
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                />
-                <br />
-                <button type="submit">Login</button>
-                <br />
-                <a href="#" onClick={() => setIsForgotPassword(true)}>Forgot Password?</a>
-            </form>
-             ) : (
-                <form
-                    onSubmit={(e) => {
-                        e.preventDefault();
-                        handleForgotPassword();
-                    }}
-                >
-                    <label>Enter your email:</label>
+        <div className="login-div">
+            {isForgotPassword ? (
+                <form className="login-form" onSubmit={handleForgotPasswordSubmit}>
+                    <h1>Forgot Password</h1>
                     <input
                         type="email"
+                        placeholder="Enter your email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
                     />
                     <br />
-                    <button type="submit">Submit</button>
+                    <button type="submit">Reset Password</button>
                     <br />
-                    <a href="#" onClick={() => setIsForgotPassword(false)}>Back to Login</a>
+                    <button type="button" onClick={() => setIsForgotPassword(false)}>
+                        Back to Login
+                    </button>
+                </form>
+            ) : (
+                <form className="login-form" onSubmit={handleSubmit}>
+                    <h1>Login</h1>
+                    <input
+                        type="email"
+                        placeholder="Email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                    />
+                    <br />
+                    <input
+                        type="password"
+                        placeholder="Password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                    />
+                    <br />
+                    <button type="submit">Login</button>
+                    
+                    <div className="divider">
+                        <span>or</span>
+                    </div>
+
+                    <button type="button" className="continue-with-button apple">
+                        <FontAwesomeIcon icon={faApple} className="provider-icon" />
+                        Continue with Apple
+                    </button>
+                    
+                    <button type="button" className="continue-with-button google">
+                        <FontAwesomeIcon icon={faGoogle} className="provider-icon" />
+                        Continue with Google
+                    </button>
+
+                    <div className="create-account">
+                        <span>Don't have an account?</span>
+                        <button type="button" className="create-account-button" onClick={() => navigate('/register')}>
+                            Create Account
+                        </button>
+                    </div>
+                    <br />
+                    <button type="button" className="forgot-password-link" onClick={() => setIsForgotPassword(true)}>
+                        Forgot Password?
+                    </button>
                 </form>
             )}
             {message && <p style={{ color: "red" }}>{message}</p>}
@@ -102,4 +155,3 @@ const LoginForm = () => {
 };
 
 export default LoginForm;
-

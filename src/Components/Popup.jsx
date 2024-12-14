@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './PopupStyle.css';
-import { apiCall, BASE_URL } from '../utils/api';
+
+const BASE_URL = 'http://127.0.0.1:5005';
 
 const Popup = ({ type, closePopup, token }) => {
   const [restaurants, setRestaurants] = useState([]);
@@ -23,9 +24,14 @@ const Popup = ({ type, closePopup, token }) => {
 
   useEffect(() => {
     if (type === 'booking') {
-      setLoading(true)
-      apiCall('/restaurants') // fetch('http://127.0.0.1:5005/restaurants')  
-        // .then((response) => response.json())
+      setLoading(true);
+      fetch(`${BASE_URL}/restaurants`)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Failed to fetch restaurants');
+          }
+          return response.json();
+        })
         .then((data) => setRestaurants(data))
         .catch((error) => {
           console.error('Error fetching restaurants:', error);
@@ -44,24 +50,21 @@ const Popup = ({ type, closePopup, token }) => {
     }
 
     setLoading(true);
-    apiCall('/bookings', {   //fetch('http://127.0.0.1:5005/bookings'  
+    fetch(`${BASE_URL}/bookings`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ restaurant: selectedRestaurant }),
     })
-      // .then((response) => {
-      //     if (!response.ok) {
-      //         throw new Error('Failed to book the restaurant.');
-      //     }
-      //     return response.text();
-      // })   /////////////the apicall already handles
-      // the fetch so i don't need the response.ok plus it throws an error 
-      // for not ok response therefore it triggers the catch block
-
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Failed to book the restaurant');
+        }
+        return response.json();
+      })
       .then((data) => {
-        setMessage('Booking successfull');
+        setMessage('Booking successful');
         setSelectedRestaurant('');
       })
       .catch((error) => {
@@ -79,7 +82,7 @@ const Popup = ({ type, closePopup, token }) => {
       return;
     }
     setLoading(true);
-    apiCall('/contact', {
+    fetch(`${BASE_URL}/contact`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -89,6 +92,12 @@ const Popup = ({ type, closePopup, token }) => {
         question,
       }),
     })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Failed to send message');
+        }
+        return response.json();
+      })
       .then((data) => {
         setMessage(data.message);
         if (!token) setEmail(''); // Clear email only for guest users
@@ -159,7 +168,7 @@ const Popup = ({ type, closePopup, token }) => {
       default:
         return null;
     }
-  }
+  };
 
   return (
     <div className="popup-overlay">

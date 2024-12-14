@@ -1,131 +1,11 @@
-// import React, { useState } from "react";
-// import { useNavigate } from "react-router-dom";
-// import AddRestaurant from "./AddResturant";
-// import appleIcon from "../photos/apple-icon.png";
-// import './Register.css';
-
-// const RegistrationForm = () => {
-//     const [step, setStep] = useState(1) // Once the page loads to the user step 1 happens.
-//     const [username, setUsername] = useState("");
-//     const [email, setEmail] = useState("");
-//     const [password, setPassword] = useState("");
-//     const [user_type, setUserType] = useState("");  
-//     const [phonenum, setPhonenum] = useState(" ")
-//     const [message, setMessage] = useState("");
-//     const [registrationSuccessful, setRegistrationSuccessful] = useState(false);
-
-//     const navigate = useNavigate();
-
-//     const handleSelectUserType = (type)=>{
-//         setUserType(type);
-//         setStep(2);
-//     }
-    
-//     const registerUser = () => {
-//         fetch('http://127.0.0.1:5005/users/register', {
-//             method: 'POST',
-//             headers: { 'Content-Type': 'application/json' },
-//             body: JSON.stringify({ username, email, password, user_type, phonenum }),
-//         })
-//             .then((response) => {
-//                 if (!response.ok) {
-//                     throw new Error('Registration failed');
-//                 }
-//                 setMessage("Registration successful");
-//                 alert("Registration successful");
-//                 if (user_type === "restaurant_owner") {
-//                     setRegistrationSuccessful(true); 
-//                 } else {
-//                     navigate("/"); 
-//                 }
-//             })
-//             .catch((error) => {
-//                 setMessage(error.message);
-//                 alert(error.message);
-//             })
-//     };
-//     return (
-//         <div className="registration-div">
-//             {step === 1 && (
-//             <div className="select-user-type">
-//                 <h1>Choose User Type</h1>
-//                 <button 
-//                 className="userType-button"
-//                 onClick={()=>handleSelectUserType("regular_user")} >
-//                     Normal User
-//                 </button>
-//                 <button
-//                 className="userType-button"
-//                 onClick={()=> handleSelectUserType("restaurant_owner")}>
-//                     Restaurant Owner
-//                 </button>
-//             </div>
-//             )}
-//             {step === 2 && !registrationSuccessful && ( 
-//                 <div className="registration-form">
-//             <h1>Registration Form</h1>
-//             <p> 
-//                 Registering as:{" "}
-//                 <strong>{user_type === "regular" ? "regular_user": "restaurant_owner"}</strong>
-//                 </p>
-//             <form
-//                 onSubmit={(e) => {
-//                     e.preventDefault(); 
-//                     registerUser();
-//                 }}
-//             >
-//                 <label>Username:</label>
-//                 <input
-//                     type="text"
-//                     value={username}
-//                     onChange={(e) => setUsername(e.target.value)}
-//                     required
-//                 />
-//                 <br />
-//                 <label>Email:</label>
-//                 <input
-//                     type="email"
-//                     value={email}
-//                     onChange={(e) => setEmail(e.target.value)}
-//                     required
-//                 />
-//                 <br />
-//                 <label>Password:</label>
-//                 <input
-//                     type="password"
-//                     value={password}
-//                     onChange={(e) => setPassword(e.target.value)}
-//                     required
-//                 />
-//                 <br />
-//                 <label>Phone Number:</label>
-//                 <input
-//                     type="text"
-//                     value={phonenum}
-//                     onChange={(e) => setPhonenum(e.target.value)}
-//                 />
-//                 <br />
-//                 <button type="submit">Register</button>
-//             </form>
-//             <div className="registration-icons">
-//                         <img
-//                             src={appleIcon}
-//                             alt="Register with Apple"
-//                             className="registration-icon"
-//                         />
-//                     </div>
-//             {message && <p>{message}</p>}
-//         </div>
-//             )}
-//             {registrationSuccessful && <AddRestaurant />}
-//         </div>
-//     );
-// };
-
-// export default RegistrationForm;
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import './Register.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faApple } from '@fortawesome/free-brands-svg-icons';
+import { faGoogle } from '@fortawesome/free-brands-svg-icons';
+
+
 
 const Register = () => {
   const [userType, setUserType] = useState(null); 
@@ -133,6 +13,7 @@ const Register = () => {
     username: "",
     email: "",
     password: "",
+    confirmPassword: "",
     phonenum: "",
   });
 
@@ -154,7 +35,7 @@ const Register = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-const handleRestaurantInputChange = (e) => {
+  const handleRestaurantInputChange = (e) => {
     const { name, value } = e.target;
     setRestaurantForm({ ...restaurantForm, [name]: value });
   };
@@ -167,10 +48,15 @@ const handleRestaurantInputChange = (e) => {
       return;
     }
 
-    const { username, email, password, phonenum } = formData;
+    const { username, email, password, confirmPassword, phonenum } = formData;
 
-    if (!username || !email || !password || !phonenum) {
+    if (!username || !email || !password || !confirmPassword || !phonenum) {
       alert("All fields are required.");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      alert("Passwords do not match.");
       return;
     }
 
@@ -191,10 +77,11 @@ const handleRestaurantInputChange = (e) => {
         localStorage.setItem("authToken", token);
 
         if (userType === "restaurant_owner") {
-            setShowRestaurantForm(true);
-          } else {
-            navigate("/");
-      } } else {
+          setShowRestaurantForm(true);
+        } else {
+          navigate("/");
+        }
+      } else {
         const error = await response.text();
         alert(`Error: ${error}`);
       }
@@ -209,8 +96,8 @@ const handleRestaurantInputChange = (e) => {
 
     const token = localStorage.getItem("authToken");
     if (!token) {
-        alert("No token found. Please log in again.");
-        return;
+      alert("No token found. Please log in again.");
+      return;
     }
 
     const {
@@ -227,65 +114,75 @@ const handleRestaurantInputChange = (e) => {
       alert("Name, location, cuisine, and max capacity are required.");
       return;
     }
+
     try {
-        const response = await fetch("http://127.0.0.1:5005/addresturant", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            name,
-            location,
-            cuisine,
-            maxcapacity,
-            halal,
-            minHealthRating,
-            dietary,
-          }),
-        });
-        if (response.ok) {
-            const message = await response.text();
-            alert(message);
+      const response = await fetch("http://127.0.0.1:5005/addresturant", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          name,
+          location,
+          cuisine,
+          maxcapacity,
+          halal,
+          minHealthRating,
+          dietary,
+        }),
+      });
+
+      if (response.ok) {
+        const message = await response.text();
+        alert(message);
             navigate("/"); // Redirect to the home page
-          } else {
-            const error = await response.text();
-            alert(`Error: ${error}`);
-          }
-        } catch (err) {
-          console.error(err);
-          alert("An error occurred. Please try again later.");
-        }
-      };
+      } else {
+        const error = await response.text();
+        alert(`Error: ${error}`);
+      }
+    } catch (err) {
+      console.error(err);
+      alert("An error occurred. Please try again later.");
+    }
+  };
 
   return (
-    <div>
-      <h1>Register</h1>
-
+    <div className="registration-div">
       {!userType ? (
-        <div>
+        <div className="select-user-type">
           <h2>Select User Type</h2>
-          <button onClick={() => setUserType("regular_user")}>Regular User</button>
-          <button onClick={() => setUserType("restaurant_owner")}>Restaurant Owner</button>
+          <div>
+            <button 
+              className="userType-button" 
+              onClick={() => setUserType("regular_user")}
+            >
+              Regular User
+            </button>
+            <button 
+              className="userType-button" 
+              onClick={() => setUserType("restaurant_owner")}
+            >
+              Restaurant Owner
+            </button>
+          </div>
         </div>
-        ) : showRestaurantForm ? (
-            <form onSubmit={handleAddRestaurant}>
-              <h2>Add Restaurant</h2>
-    
-              <label>
-                Name:
-                <input
-                  type="text"
-                  name="name"
-                  value={restaurantForm.name}
-                  onChange={handleRestaurantInputChange}
-                  required
-                />
-              </label>
-              <br />
-            
-          <label>
-            Location:
+      ) : showRestaurantForm ? (
+        <form className="registration-form" onSubmit={handleAddRestaurant}>
+          <h1>Add Restaurant Details</h1>
+          <div className="form-group">
+            <label>Restaurant Name:</label>
+            <input
+              type="text"
+              name="name"
+              value={restaurantForm.name}
+              onChange={handleRestaurantInputChange}
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label>Location:</label>
             <input
               type="text"
               name="location"
@@ -293,11 +190,10 @@ const handleRestaurantInputChange = (e) => {
               onChange={handleRestaurantInputChange}
               required
             />
-          </label>
-          <br />
+          </div>
 
-          <label>
-            Cuisine:
+          <div className="form-group">
+            <label>Cuisine Type:</label>
             <input
               type="text"
               name="cuisine"
@@ -305,10 +201,10 @@ const handleRestaurantInputChange = (e) => {
               onChange={handleRestaurantInputChange}
               required
             />
-          </label>
-          <br />
-          <label>
-            Max Capacity:
+          </div>
+
+          <div className="form-group">
+            <label>Maximum Capacity:</label>
             <input
               type="number"
               name="maxcapacity"
@@ -316,49 +212,49 @@ const handleRestaurantInputChange = (e) => {
               onChange={handleRestaurantInputChange}
               required
             />
-          </label>
-          <br />
+          </div>
 
-          <label>
-            Halal:
+          <div className="form-group">
+            <label>Halal Options:</label>
             <input
               type="text"
               name="halal"
               value={restaurantForm.halal}
               onChange={handleRestaurantInputChange}
             />
-          </label>
-          <br />
-          <label>
-            Minimum Health Rating:
+          </div>
+
+          <div className="form-group">
+            <label>Minimum Health Rating:</label>
             <input
               type="text"
               name="minHealthRating"
               value={restaurantForm.minHealthRating}
               onChange={handleRestaurantInputChange}
             />
-          </label>
-          <br />
+          </div>
 
-          <label>
-            Dietary Options:
+          <div className="form-group">
+            <label>Dietary Options:</label>
             <input
               type="text"
               name="dietary"
               value={restaurantForm.dietary}
               onChange={handleRestaurantInputChange}
             />
-          </label>
-          <br />
+          </div>
 
           <button type="submit">Add Restaurant</button>
         </form>
       ) : (
-        <form onSubmit={handleRegister}>
-          <h2>Register as {userType.replace("_", " ")}</h2>
-
-          <label>
-            Username:
+        <form className="registration-form" onSubmit={handleRegister}>
+          <button type="button" className="back-button" onClick={() => setUserType(null)}>
+            ↩
+          </button>
+          <h1>Register as {userType.replace("_", " ")}</h1>
+          
+          <div className="form-group">
+            <label>Username:</label>
             <input
               type="text"
               name="username"
@@ -366,11 +262,10 @@ const handleRestaurantInputChange = (e) => {
               onChange={handleInputChange}
               required
             />
-          </label>
-          <br />
+          </div>
 
-          <label>
-            Email:
+          <div className="form-group">
+            <label>Email:</label>
             <input
               type="email"
               name="email"
@@ -378,11 +273,10 @@ const handleRestaurantInputChange = (e) => {
               onChange={handleInputChange}
               required
             />
-          </label>
-          <br />
+          </div>
 
-          <label>
-            Password:
+          <div className="form-group">
+            <label>Password:</label>
             <input
               type="password"
               name="password"
@@ -390,11 +284,21 @@ const handleRestaurantInputChange = (e) => {
               onChange={handleInputChange}
               required
             />
-          </label>
-          <br />
+          </div>
 
-          <label>
-            Phone Number:
+          <div className="form-group">
+            <label>Confirm Password:</label>
+            <input
+              type="password"
+              name="confirmPassword"
+              value={formData.confirmPassword}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label>Phone Number:</label>
             <input
               type="text"
               name="phonenum"
@@ -402,12 +306,22 @@ const handleRestaurantInputChange = (e) => {
               onChange={handleInputChange}
               required
             />
-          </label>
-          <br />
+          </div>
 
           <button type="submit">Register</button>
-          <button type="button" onClick={() => setUserType(null)}>
-            Go Back
+
+          <div className="divider">
+            <span>or</span>
+          </div>
+
+          <button type="button" className="continue-with-button apple">
+            <FontAwesomeIcon icon={faApple} className="provider-icon" />
+            Continue with Apple
+          </button>
+
+          <button type="button" className="continue-with-button google">
+            <FontAwesomeIcon icon={faGoogle} className="provider-icon" />
+            Continue with Google
           </button>
         </form>
       )}
