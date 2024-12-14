@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from 'react-router-dom'; 
+import { AuthContext } from '../AuthContext';
 import './Login.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faApple, faGoogle } from '@fortawesome/free-brands-svg-icons';
@@ -11,6 +12,7 @@ const LoginForm = () => {
     const [isForgotPassword, setIsForgotPassword] = useState(false);
 
     const navigate = useNavigate();
+    const { login } = useContext(AuthContext);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -29,33 +31,48 @@ const LoginForm = () => {
             });
 
             const data = await response.json();
-            console.log('Login response:', data); // Debug log
+            console.log('Login response:', data);
 
             if (!response.ok) {
                 throw new Error(data.message || 'Login failed');
             }
 
-            // Check if we have all required data
-            if (!data.token || !data.username || !data.userType) {
-                throw new Error('Invalid response from server');
+            // Extract user ID from token
+            const tokenParts = data.token.split('.');
+            let userId = '';
+            try {
+                const tokenPayload = JSON.parse(atob(tokenParts[1]));
+                userId = tokenPayload.id;
+                console.log('Extracted user ID from token:', userId);
+            } catch (err) {
+                console.error('Error extracting user ID from token:', err);
             }
 
-            // Store user data in localStorage
+            // Store auth data
             localStorage.setItem('authToken', data.token);
-            localStorage.setItem('username', data.username);
-            localStorage.setItem('email', data.email || '');
             localStorage.setItem('userType', data.userType);
-            
-            // Only set userId if it exists
-            if (data.id !== undefined && data.id !== null) {
-                localStorage.setItem('userId', data.id.toString());
-            }
+            localStorage.setItem('username', data.username);
+            localStorage.setItem('email', data.email);
+            localStorage.setItem('userId', userId);
 
-            setMessage('Login successful!');
+            console.log('Stored auth data:', {
+                token: !!localStorage.getItem('authToken'),
+                userType: localStorage.getItem('userType'),
+                email: localStorage.getItem('email'),
+                username: localStorage.getItem('username'),
+                userId: localStorage.getItem('userId')
+            });
+
+            // Call login from context
+            await login(data.token, data.userType, {
+                username: data.username,
+                email: data.email,
+                id: userId
+            });
             
+            setMessage('Login successful!');
             setTimeout(() => {
                 navigate('/');
-                window.location.reload();
             }, 1500);
         } catch (err) {
             console.error('Login error:', err);

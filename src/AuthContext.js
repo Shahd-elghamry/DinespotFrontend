@@ -1,38 +1,53 @@
 import React, { createContext, useState, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 
-export const AuthContext = createContext(null);
+export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [userType, setUserType] = useState(null);
 
     useEffect(() => {
-        console.log('AuthProvider: Checking authentication...');
-        const token = localStorage.getItem('authToken');
-        const storedUserType = localStorage.getItem('userType');
-        
-        console.log('Token exists:', !!token);
-        console.log('Stored user type:', storedUserType);
-        
-        if (token) {
-            setIsAuthenticated(true);
-            if (storedUserType) {
+        const checkAuth = () => {
+            const token = localStorage.getItem('authToken');
+            const storedUserType = localStorage.getItem('userType');
+            const userId = localStorage.getItem('userId');
+
+            console.log('AuthProvider - Checking auth state:', {
+                hasToken: !!token,
+                userType: storedUserType,
+                userId: userId
+            });
+            
+            if (token && storedUserType && userId) {
+                setIsAuthenticated(true);
                 setUserType(storedUserType);
+            } else {
+                setIsAuthenticated(false);
+                setUserType(null);
             }
-        }
+        };
+
+        checkAuth();
     }, []);
 
-    const login = (token, type) => {
-        console.log('Login called with token:', !!token, 'type:', type);
+    const login = (token, type, userData) => {
+        console.log('AuthContext login called with:', { type, userData });
+        
         localStorage.setItem('authToken', token);
         localStorage.setItem('userType', type);
+        localStorage.setItem('username', userData.username || '');
+        localStorage.setItem('email', userData.email || '');
+        
+        if (userData.id) {
+            localStorage.setItem('userId', userData.id.toString());
+        }
+
         setIsAuthenticated(true);
         setUserType(type);
     };
 
     const logout = () => {
-        console.log('Logout called');
         localStorage.clear();
         setIsAuthenticated(false);
         setUserType(null);

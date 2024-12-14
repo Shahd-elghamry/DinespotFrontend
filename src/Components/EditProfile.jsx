@@ -1,11 +1,9 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AuthContext } from '../AuthContext';
 import './EditProfile.css';
 
 const EditProfile = () => {
     const navigate = useNavigate();
-    const { isAuthenticated } = useContext(AuthContext);
     const [formData, setFormData] = useState({
         username: '',
         email: '',
@@ -16,35 +14,25 @@ const EditProfile = () => {
     const [error, setError] = useState('');
 
     useEffect(() => {
-        console.log('EditProfile mounted, isAuthenticated:', isAuthenticated);
-        
-        // Check authentication first
-        if (!isAuthenticated) {
-            console.log('Not authenticated, redirecting to login');
+        const authToken = localStorage.getItem('authToken');
+        const userId = localStorage.getItem('userId');
+
+        if (!authToken || !userId) {
             navigate('/login');
             return;
         }
 
-        const userId = localStorage.getItem('userId');
-        const authToken = localStorage.getItem('authToken');
-        
-        console.log('userId:', userId);
-        console.log('authToken exists:', !!authToken);
-
-        if (!userId || !authToken) {
-            setError('Unable to load user data');
-            return;
-        }
-
-        // Fetch user data
         fetch(`http://127.0.0.1:5005/user/${userId}`, {
+            method: 'GET',
             headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
                 'Authorization': `Bearer ${authToken}`
             }
         })
         .then(response => {
             if (!response.ok) {
-                throw new Error('Failed to fetch user data');
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
             return response.json();
         })
@@ -58,10 +46,11 @@ const EditProfile = () => {
             });
         })
         .catch(err => {
-            console.error('Error:', err);
-            setError('Error loading user data: ' + err.message);
+            console.error('Error fetching user data:', err);
+            setError('Failed to load user data. Please try logging in again.');
+            setTimeout(() => navigate('/login'), 2000);
         });
-    }, [navigate, isAuthenticated]);
+    }, [navigate]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -76,20 +65,13 @@ const EditProfile = () => {
         setMessage('');
         setError('');
 
-        const userId = localStorage.getItem('userId');
         const authToken = localStorage.getItem('authToken');
+        const userId = localStorage.getItem('userId');
 
-        if (!userId || !authToken) {
-            setError('You must be logged in to update your profile');
+        if (!authToken || !userId) {
+            navigate('/login');
             return;
         }
-
-        // Only include fields that have been changed
-        const updates = {};
-        if (formData.username) updates.username = formData.username;
-        if (formData.email) updates.email = formData.email;
-        if (formData.password) updates.password = formData.password;
-        if (formData.phonenum) updates.phonenum = parseInt(formData.phonenum, 10) || null;
 
         try {
             const response = await fetch(`http://127.0.0.1:5005/user/edit/${userId}`, {
@@ -98,24 +80,27 @@ const EditProfile = () => {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${authToken}`
                 },
-                body: JSON.stringify(updates)
+                body: JSON.stringify({
+                    username: formData.username,
+                    email: formData.email,
+                    password: formData.password || undefined,
+                    phonenum: formData.phonenum ? parseInt(formData.phonenum, 10) : undefined
+                })
             });
 
-            const data = await response.text();
-            console.log('Update response:', data);
+            const responseText = await response.text();
+            console.log('Update response:', responseText);
 
             if (response.ok) {
                 setMessage('Profile updated successfully!');
-                // Update local storage
-                if (updates.username) localStorage.setItem('username', updates.username);
-                if (updates.email) localStorage.setItem('email', updates.email);
+                localStorage.setItem('username', formData.username);
+                localStorage.setItem('email', formData.email);
                 
                 setTimeout(() => {
                     navigate('/');
-                    window.location.reload();
                 }, 1500);
             } else {
-                setError(data || 'Failed to update profile');
+                setError(responseText || 'Failed to update profile');
             }
         } catch (err) {
             console.error('Error updating profile:', err);
@@ -129,7 +114,7 @@ const EditProfile = () => {
             {error && <div className="error-message">{error}</div>}
             {message && <div className="success-message">{message}</div>}
             
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} className="edit-profile-form">
                 <div className="form-group">
                     <label>Username:</label>
                     <input
@@ -137,6 +122,7 @@ const EditProfile = () => {
                         name="username"
                         value={formData.username}
                         onChange={handleChange}
+                        required
                     />
                 </div>
 
@@ -147,6 +133,7 @@ const EditProfile = () => {
                         name="email"
                         value={formData.email}
                         onChange={handleChange}
+                        required
                     />
                 </div>
 
