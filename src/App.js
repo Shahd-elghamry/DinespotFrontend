@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'; 
 import Navbar from "./Components/Navbar";
-import Home from './Components/Home'; // These components are in the 'Components' folder
+import Home from './Components/Home';
 import Restaurant from './Components/Restaurants';
 import LoginForm from './Components/Login';
 import RegistrationForm from './Components/Register';
