@@ -63,6 +63,12 @@ const Navbar = () => {
             <>
                 <Link to="/profile">My Profile</Link>
                 <Link to="/edit-profile" className="nav-link">Edit Profile</Link>
+            </>
+        );
+
+        const bottomItems = (
+            <>
+                <div className="menu-divider"></div>
                 <button className="delete-account-btn" onClick={handleDeleteAccount}>Delete Account</button>
                 <button onClick={handleLogout}>Logout</button>
             </>
@@ -74,6 +80,7 @@ const Navbar = () => {
                     <>
                         {commonItems}
                         <Link to="/bookings">My Bookings</Link>
+                        {bottomItems}
                     </>
                 );
             case 'restaurant_owner':
@@ -81,6 +88,7 @@ const Navbar = () => {
                     <>
                         {commonItems}
                         <Link to="/my-restaurants">My Restaurants</Link>
+                        {bottomItems}
                     </>
                 );
             case 'admin':
@@ -88,10 +96,16 @@ const Navbar = () => {
                     <>
                         {commonItems}
                         <Link to="/control-panel">Control Panel</Link>
+                        {bottomItems}
                     </>
                 );
             default:
-                return commonItems;
+                return (
+                    <>
+                        {commonItems}
+                        {bottomItems}
+                    </>
+                );
         }
     };
 
@@ -106,9 +120,6 @@ const Navbar = () => {
                 {canAddRestaurant && (
                     <li><Link to="/AddRestaurant">Add Restaurant</Link></li>
                 )}
-                <li>
-                    <Link to="/settings" className="nav-link">Settings</Link>
-                </li>
             </ul>
             <ul className='navbar-auth'>
                 {!isAuthenticated ? (

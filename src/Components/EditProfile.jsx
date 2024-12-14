@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './EditProfile.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 const EditProfile = () => {
     const navigate = useNavigate();
@@ -110,11 +112,15 @@ const EditProfile = () => {
 
     return (
         <div className="edit-profile-container">
-            <h2>Edit Profile</h2>
             {error && <div className="error-message">{error}</div>}
             {message && <div className="success-message">{message}</div>}
             
             <form onSubmit={handleSubmit} className="edit-profile-form">
+                <button type="button" onClick={() => navigate('/')} className="back-button">
+                    <FontAwesomeIcon icon={faArrowLeft} />
+                </button>
+                <h2>Edit Profile</h2>
+
                 <div className="form-group">
                     <label>Username:</label>
                     <input
