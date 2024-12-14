@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from 'react-router-dom'; 
+import { AuthContext } from '../AuthContext';
 import './Login.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faApple, faGoogle } from '@fortawesome/free-brands-svg-icons';
@@ -11,50 +12,71 @@ const LoginForm = () => {
     const [isForgotPassword, setIsForgotPassword] = useState(false);
 
     const navigate = useNavigate();
+    const { login } = useContext(AuthContext);
 
-    const loginUser = async () => {
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setMessage("");
+
         try {
-            console.log('Attempting login with:', { email }); // Debug log
-
             const response = await fetch('http://127.0.0.1:5005/user/login', {
                 method: 'POST',
-                headers: { 'Content-type': 'application/json' },
-                body: JSON.stringify({ email, password }),
-                credentials: "include"
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email: email,
+                    password: password
+                })
             });
 
             const data = await response.json();
-            console.log('Login response:', data); // Debug log
+            console.log('Login response:', data);
 
             if (!response.ok) {
                 throw new Error(data.message || 'Login failed');
             }
 
-            if (data.token) {
-                // Store the token and user info in localStorage
-                localStorage.setItem('authToken', data.token);
-                localStorage.setItem('userType', data.userType);
-                localStorage.setItem('username', data.username);
-                localStorage.setItem('email', data.email);
-                
-                console.log('Stored in localStorage:', {
-                    token: data.token,
-                    userType: data.userType,
-                    username: data.username,
-                    email: data.email
-                }); // Debug log
-
-                // Navigate to home first
-                navigate("/");
-                
-                // Then reload the page after a short delay
-                setTimeout(() => {
-                    window.location.reload();
-                }, 100);
+            // Extract user ID from token
+            const tokenParts = data.token.split('.');
+            let userId = '';
+            try {
+                const tokenPayload = JSON.parse(atob(tokenParts[1]));
+                userId = tokenPayload.id;
+                console.log('Extracted user ID from token:', userId);
+            } catch (err) {
+                console.error('Error extracting user ID from token:', err);
             }
-        } catch (error) {
-            console.error('Login error:', error); // Debug log
-            setMessage(error.message);
+
+            // Store auth data
+            localStorage.setItem('authToken', data.token);
+            localStorage.setItem('userType', data.userType);
+            localStorage.setItem('username', data.username);
+            localStorage.setItem('email', data.email);
+            localStorage.setItem('userId', userId);
+
+            console.log('Stored auth data:', {
+                token: !!localStorage.getItem('authToken'),
+                userType: localStorage.getItem('userType'),
+                email: localStorage.getItem('email'),
+                username: localStorage.getItem('username'),
+                userId: localStorage.getItem('userId')
+            });
+
+            // Call login from context
+            await login(data.token, data.userType, {
+                username: data.username,
+                email: data.email,
+                id: userId
+            });
+            
+            setMessage('Login successful!');
+            setTimeout(() => {
+                navigate('/');
+            }, 1500);
+        } catch (err) {
+            console.error('Login error:', err);
+            setMessage(err.message || 'Failed to login. Please try again.');
         }
     };
 
@@ -71,11 +93,6 @@ const LoginForm = () => {
         } catch (error) {
             setMessage('An error occurred. Please try again.');
         }
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        loginUser();
     };
 
     const handleForgotPasswordSubmit = (e) => {

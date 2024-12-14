@@ -1,80 +1,112 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Link } from 'react-router-dom'; 
+import { AuthContext } from '../AuthContext';
 import './Navbar.css'; 
 import profileIcon from '../photos/profileIcon.png';
 
 const Navbar = () => {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const { isAuthenticated, logout, userType, setUserType } = useContext(AuthContext);
     const [profileMenuVisible, setProfileMenuVisible] = useState(false);
     const [username, setUsername] = useState('');
-    const [userType, setUserType] = useState('');
    
     useEffect(() => {
-        const token = localStorage.getItem("authToken");
         const storedUsername = localStorage.getItem("username");
-        const storedUserType = localStorage.getItem("userType");
         
-        if (token) {
-            setIsLoggedIn(true);
+        if (isAuthenticated) {
             if (storedUsername) {
                 setUsername(storedUsername);
             }
-            if (storedUserType) {
-                setUserType(storedUserType);
-            }
         }
-    }, []);
+    }, [isAuthenticated]);
 
     const handleLogout = () => {
-        //for the logout
-        localStorage.removeItem("authToken");
-        localStorage.removeItem("userType");
-        localStorage.removeItem("username");
-        localStorage.removeItem("email");
-        setIsLoggedIn(false);
+        logout();
+        setUserType(null);
         setProfileMenuVisible(false);
         window.location.reload();
+    };
+
+    const handleDeleteAccount = async () => {
+        if (!window.confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+            return;
+        }
+
+        const authToken = localStorage.getItem('authToken');
+        try {
+            const response = await fetch('http://127.0.0.1:5005/user/delete', {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${authToken}`
+                }
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Failed to delete account');
+            }
+
+            // Clear all local storage items
+            localStorage.clear();
+            window.location.href = '/login';
+        } catch (error) {
+            console.error('Error deleting account:', error);
+            alert(error.message || 'An error occurred while deleting account');
+        }
     };
 
     const canAddRestaurant = userType === 'restaurant_owner' || userType === 'admin';
 
     const renderProfileMenuItems = () => {
+        if (!userType) return null;
+
         const commonItems = (
             <>
                 <Link to="/profile">My Profile</Link>
-                <Link to="/settings">Settings</Link>
+                <Link to="/edit-profile" className="nav-link">Edit Profile</Link>
             </>
         );
 
-        let roleSpecificItems = null;
-
-        switch(userType) {
-            case 'regular_user':
-                roleSpecificItems = (
-                    <Link to="/bookings">My Bookings</Link>
-                );
-                break;
-            case 'restaurant_owner':
-                roleSpecificItems = (
-                    <Link to="/my-restaurants">My Restaurants</Link>
-                );
-                break;
-            case 'admin':
-                roleSpecificItems = (
-                    <Link to="/control-panel">Control Panel</Link>
-                );
-                break;
-            default:
-                break;
-        }
-
-        return (
+        const bottomItems = (
             <>
-                {commonItems}
-                {roleSpecificItems}
+                <div className="menu-divider"></div>
+                <button className="delete-account-btn" onClick={handleDeleteAccount}>Delete Account</button>
                 <button onClick={handleLogout}>Logout</button>
             </>
         );
+
+        switch(userType) {
+            case 'regular_user':
+                return (
+                    <>
+                        {commonItems}
+                        <Link to="/bookings">My Bookings</Link>
+                        {bottomItems}
+                    </>
+                );
+            case 'restaurant_owner':
+                return (
+                    <>
+                        {commonItems}
+                        <Link to="/my-restaurants">My Restaurants</Link>
+                        {bottomItems}
+                    </>
+                );
+            case 'admin':
+                return (
+                    <>
+                        {commonItems}
+                        <Link to="/control-panel">Control Panel</Link>
+                        {bottomItems}
+                    </>
+                );
+            default:
+                return (
+                    <>
+                        {commonItems}
+                        {bottomItems}
+                    </>
+                );
+        }
     };
 
     return (
@@ -90,31 +122,31 @@ const Navbar = () => {
                 )}
             </ul>
             <ul className='navbar-auth'>
-            {!isLoggedIn ? (
-                <>
-                    <li><Link to="/Login">Login</Link></li>
-                    <li><Link to="/Register">Register</Link></li>
-                </>
-            ) : (
-                <li className="profile-section">
-                    <div 
-                        className='profile-icon'
-                        onClick={() => setProfileMenuVisible(!profileMenuVisible)}
-                    >
-                        <img 
-                            src={profileIcon} 
-                            alt="Profile" 
-                            className="profile-image"
-                        />
-                        <span className="username">{username}</span>
-                    </div>
-                    {profileMenuVisible && (
-                        <div className="profile-menu">
-                            {renderProfileMenuItems()}
+                {!isAuthenticated ? (
+                    <>
+                        <li><Link to="/Login">Login</Link></li>
+                        <li><Link to="/Register">Register</Link></li>
+                    </>
+                ) : (
+                    <li className="profile-section">
+                        <div 
+                            className='profile-icon'
+                            onClick={() => setProfileMenuVisible(!profileMenuVisible)}
+                        >
+                            <img 
+                                src={profileIcon} 
+                                alt="Profile" 
+                                className="profile-image"
+                            />
+                            <span className="username">{username}</span>
                         </div>
-                    )}
-                </li>
-            )}
+                        {profileMenuVisible && (
+                            <div className="profile-menu">
+                                {renderProfileMenuItems()}
+                            </div>
+                        )}
+                    </li>
+                )}
             </ul>
         </nav>
     );
