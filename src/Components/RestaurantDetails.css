@@ -7,7 +7,7 @@
 
 .restaurant-name {
     font-size: 2.5rem;
-    color: #333;
+    color: #000;
     margin: 0;
     text-align: center;
 }
@@ -21,10 +21,10 @@
 }
 
 .rating-bar-container {
-    flex: 1;
-    height: 8px;
+    width: 200px;
+    height: 6px;
     background-color: #eee;
-    border-radius: 4px;
+    border-radius: 3px;
     overflow: hidden;
 }
 
@@ -36,13 +36,13 @@
 
 .rating-text {
     font-size: 1.1rem;
-    color: #666;
+    color: #000;
 }
 
 .location-info {
     text-align: center;
     margin-bottom: 2rem;
-    color: #666;
+    color: #000;
     font-size: 1.1rem;
 }
 

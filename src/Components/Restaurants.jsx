@@ -49,9 +49,15 @@ const RestaurantsComponent = () => {
 
             console.log("Response status:", response.status);
 
+            // Handle 404 (No restaurants found) as a valid case
+            if (response.status === 404) {
+                setRestaurants([]);
+                return;
+            }
+
             if (!response.ok) {
                 const errorText = await response.text();
-                throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
+                throw new Error(`Error: ${errorText}`);
             }
 
             const data = await response.json();
@@ -65,7 +71,7 @@ const RestaurantsComponent = () => {
             setRestaurants(filteredData);
         } catch (error) {
             console.error("Error fetching restaurants:", error);
-            setMessage(`Error fetching restaurants: ${error.message}`);
+            setMessage(`An error occurred while fetching restaurants. Please try again later.`);
             setRestaurants([]);
         } finally {
             setLoading(false);
@@ -77,11 +83,28 @@ const RestaurantsComponent = () => {
         fetchRestaurants();
     }, [fetchRestaurants]);
 
-    // Filter the restaurants based on search term (name only)
+    // Filter the restaurants based on search term (across all fields)
     const filteredRestaurants = restaurants.filter(restaurant => {
-        const searchMatch = searchTerm.trim() === '' || 
-            restaurant.name.toLowerCase().includes(searchTerm.toLowerCase());
-        return searchMatch;
+        if (searchTerm.trim() === '') return true;
+        
+        const searchLower = searchTerm.toLowerCase();
+        return (
+            // Search in name
+            restaurant.name.toLowerCase().includes(searchLower) ||
+            // Search in location
+            restaurant.location.toLowerCase().includes(searchLower) ||
+            // Search in cuisine
+            restaurant.cuisine.toLowerCase().includes(searchLower) ||
+            // Search in dietary options
+            (restaurant.dietary && restaurant.dietary.toLowerCase().includes(searchLower)) ||
+            // Search in halal status
+            (searchLower === 'halal' && restaurant.halal === 'yes') ||
+            (searchLower === 'non halal' && restaurant.halal === 'no') ||
+            // Search in health rating
+            (restaurant.minHealthRating && restaurant.minHealthRating.toString().includes(searchLower)) ||
+            // Search in maximum capacity
+            (restaurant.maxcapacity && restaurant.maxcapacity.toString().includes(searchLower))
+        );
     });
 
     return (
@@ -92,7 +115,7 @@ const RestaurantsComponent = () => {
             <div className="search-bar">
                 <input 
                     type="text" 
-                    placeholder="Search restaurants..." 
+                    placeholder="Search by name, location, cuisine, dietary options..." 
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                 />
@@ -145,51 +168,53 @@ const RestaurantsComponent = () => {
             </div>
 
             {/* Loading and Error States */}
-            {loading && <p>Loading restaurants...</p>}
+            {loading && <p className="loading-message">Loading restaurants...</p>}
             {message && <p className="error-message">{message}</p>}
 
             {/* Restaurants List */}
             <div className="restaurants-list">
-                {loading ? (
-                    <p>Loading restaurants...</p>
-                ) : message ? (
-                    <p className="error-message">{message}</p>
-                ) : filteredRestaurants.length === 0 ? (
-                    <p>No restaurants match your criteria.</p>
-                ) : (
-                    filteredRestaurants.map((restaurant, index) => (
-                        <div 
-                            key={index} 
-                            className="restaurant-card"
-                            onClick={() => navigate(`/restaurant/${restaurant.id}`)}
-                            style={{ cursor: 'pointer' }}
-                        >
-                            <div className="restaurant-preview">
-                                <img 
-                                    src={restaurant.image || 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4'} 
-                                    alt={restaurant.name} 
-                                    className="restaurant-image"
-                                />
-                                <h2>{restaurant.name}</h2>
-                            </div>
-                            <div className="restaurant-details">
-                                <img 
-                                    src={restaurant.image || 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4'} 
-                                    alt={restaurant.name} 
-                                    className="restaurant-image-large"
-                                />
-                                <h2>{restaurant.name}</h2>
-                                <div className="details-content">
-                                    <p><strong>Location:</strong> {restaurant.location}</p>
-                                    <p><strong>Cuisine:</strong> {restaurant.cuisine}</p>
-                                    <p><strong>Maximum Capacity:</strong> {restaurant.maxcapacity}</p>
-                                    <p><strong>Halal:</strong> {restaurant.halal === "yes" ? 'Yes' : 'No'}</p>
-                                    <p><strong>Health Rating:</strong> {restaurant.minHealthRating || 'N/A'}</p>
-                                    <p><strong>Dietary Options:</strong> {restaurant.dietary || 'None'}</p>
+                {!loading && !message && filteredRestaurants.length === 0 && (
+                    <div className="no-results-message">
+                        <p>No restaurants with those specifications available.</p>
+                        <p>Try adjusting your filters or search criteria.</p>
+                    </div>
+                )}
+                {!loading && !message && filteredRestaurants.length > 0 && (
+                    <div className="restaurants-grid">
+                        {filteredRestaurants.map((restaurant, index) => (
+                            <div 
+                                key={index} 
+                                className="restaurant-card"
+                                onClick={() => navigate(`/restaurant/${restaurant.id}`)}
+                                style={{ cursor: 'pointer' }}
+                            >
+                                <div className="restaurant-preview">
+                                    <img 
+                                        src={restaurant.image || 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4'} 
+                                        alt={restaurant.name} 
+                                        className="restaurant-image"
+                                    />
+                                    <h2>{restaurant.name}</h2>
+                                </div>
+                                <div className="restaurant-details">
+                                    <img 
+                                        src={restaurant.image || 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4'} 
+                                        alt={restaurant.name} 
+                                        className="restaurant-image-large"
+                                    />
+                                    <h2>{restaurant.name}</h2>
+                                    <div className="details-content">
+                                        <p><strong>Location:</strong> {restaurant.location}</p>
+                                        <p><strong>Cuisine:</strong> {restaurant.cuisine}</p>
+                                        <p><strong>Maximum Capacity:</strong> {restaurant.maxcapacity}</p>
+                                        <p><strong>Halal:</strong> {restaurant.halal === "yes" ? 'Yes' : 'No'}</p>
+                                        <p><strong>Health Rating:</strong> {restaurant.minHealthRating || 'N/A'}</p>
+                                        <p><strong>Dietary Options:</strong> {restaurant.dietary || 'None'}</p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    ))
+                        ))}
+                    </div>
                 )}
             </div>
         </div>

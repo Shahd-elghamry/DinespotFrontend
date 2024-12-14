@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Home.css';
 
 const Home = () => {
@@ -7,6 +7,7 @@ const Home = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [visibleSections, setVisibleSections] = useState(new Set());
     const featuredRef = useRef(null);
+    const navigate = useNavigate();
 
     const slides = [
         {
@@ -130,7 +131,12 @@ const Home = () => {
                 <div className="restaurant-scroll">
                     <div className="restaurant-row">
                         {restaurants.slice(0, 5).map((restaurant) => (
-                            <div key={restaurant.id} className="restaurant-card">
+                            <div 
+                                key={restaurant.id} 
+                                className="restaurant-card"
+                                onClick={() => navigate(`/restaurant/${restaurant.id}`)}
+                                style={{ cursor: 'pointer' }}
+                            >
                                 <div className="restaurant-preview">
                                     <img
                                         src={restaurant.image || 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4'}

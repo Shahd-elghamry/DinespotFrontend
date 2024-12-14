@@ -10,13 +10,14 @@ import AddRestaurant from './Components/AddResturant';
 import NotFound from './Components/NotFound'; 
 import RestaurantDetails from './Components/RestaurantDetails'; 
 import BookingPage from './Components/BookingPage';
+import './App.css';
 
 function App() {
   return (
     <Router>
-      <div>
+      <div className="app-container">
         <Navbar />
-        <div style={{ height: '200vh', paddingTop: '70px' }}>
+        <div className="main-content">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/restaurant" element={<Restaurant />} />
