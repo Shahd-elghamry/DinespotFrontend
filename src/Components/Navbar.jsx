@@ -84,7 +84,7 @@ const Navbar = () => {
             </div>
             <ul className="navbar-lists">
                 <li><Link to="/">Home</Link></li>
-                <li><Link to="/Restaurants">Restaurants</Link></li>
+                <li><Link to="/restaurant">Restaurants</Link></li>
                 {canAddRestaurant && (
                     <li><Link to="/AddRestaurant">Add Restaurant</Link></li>
                 )}

@@ -30,9 +30,15 @@ const Footer = () => {
           </ul>
         </div>
         <div className="footer-social">
-          <span className="social-icon"><i className="icon-facebook"></i></span>
-          <span className="social-icon"><i className="icon-twitter"></i></span>
-          <span className="social-icon"><i className="icon-instagram"></i></span>
+          <a href="https://www.facebook.com/dinespot" target="_blank" rel="noopener noreferrer" className="social-icon">
+            <i className="icon-facebook"></i>
+          </a>
+          <a href="https://www.twitter.com/dinespot" target="_blank" rel="noopener noreferrer" className="social-icon">
+            <i className="icon-twitter"></i>
+          </a>
+          <a href="https://www.instagram.com/dinespot" target="_blank" rel="noopener noreferrer" className="social-icon">
+            <i className="icon-instagram"></i>
+          </a>
         </div>
       </div>
       <div className="footer-bottom-logo">
