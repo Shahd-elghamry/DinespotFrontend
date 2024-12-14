@@ -166,31 +166,30 @@ const RestaurantDetails = () => {
         }
 
         return (
-            <>
+            <div className="reviews-section">
                 <div className="reviews-header">
-                    <h3>Reviews ({restaurant.reviews.length})</h3>
-                    <button 
-                        className="add-review-button"
-                        onClick={handleAddReviewClick}
-                    >
+                    <h2 className="reviews-title">Reviews ({restaurant.reviews.length})</h2>
+                    <button className="add-review-btn" onClick={handleAddReviewClick}>
                         Add Review
                     </button>
                 </div>
                 <div className="reviews-list">
                     {restaurant.reviews.map((review, index) => (
-                        <div key={review.id || index} className="review-item">
+                        <div key={index} className="review-card">
                             <div className="review-header">
-                                <span className="reviewer-name">{review.userName || 'Anonymous'}</span>
+                                <span className="review-author">{review.userName || 'Anonymous'}</span>
                                 <span className="review-date">{formatDate(review.created_at || new Date().toISOString())}</span>
                             </div>
-                            <div className="review-rating">
-                                {'★'.repeat(review.rating)}{'☆'.repeat(5 - review.rating)}
+                            <div className="rating-display">
+                                {[...Array(5)].map((_, i) => (
+                                    <span key={i} className={i < review.rating ? "star filled" : "star"}>★</span>
+                                ))}
                             </div>
                             <p className="review-content">{review.review}</p>
                         </div>
                     ))}
                 </div>
-            </>
+            </div>
         );
     };
 
