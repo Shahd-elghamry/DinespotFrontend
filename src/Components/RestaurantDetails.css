@@ -113,21 +113,23 @@
 }
 
 .book-button {
-    background-color: #4CAF50;
-    color: white;
+    background-color: #001f3f;
+    color: #f5f5dc;
     padding: 12px 24px;
     border: none;
-    border-radius: 4px;
+    border-radius: 5px;
     font-size: 1rem;
+    font-weight: bold;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .book-button:hover {
-    background-color: #45a049;
+    background-color: #174f86;
+    transform: scale(1.02);
 }
 
 .book-button:focus {
     outline: none;
-    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.5);
+    box-shadow: 0 0 0 2px rgba(0, 31, 63, 0.3);
 }
