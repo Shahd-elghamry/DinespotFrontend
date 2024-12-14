@@ -1,0 +1,127 @@
+.booking-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.booking-container h1 {
+    font-size: 24px;
+    margin-bottom: 30px;
+    color: #001f3f;
+    text-align: center;
+}
+
+.booking-form {
+    margin: 50px auto;
+    width: 80%;
+    max-width: 400px;
+    padding: 30px;
+    border: 2px solid #001f3f;
+    border-radius: 10px;
+    background-color: #f5f5dc;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    position: relative;
+}
+
+.back-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: none;
+    border: none;
+    font-size: 28px;
+    color: #001f3f;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    transition: transform 0.2s ease;
+    line-height: 1;
+}
+
+.back-button:hover {
+    transform: scale(1.1);
+    color: #174f86;
+}
+
+.back-button:focus {
+    outline: none;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin: 15px 0 5px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #001f3f;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #001f3f;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box;
+    background-color: white;
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.submit-button {
+    width: 100%;
+    padding: 15px;
+    margin-top: 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    background-color: #001f3f;
+    color: #f5f5dc;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.submit-button:hover {
+    background-color: #174f86;
+    transform: scale(1.02);
+}
+
+.title-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 30px;
+    margin-top: 60px;
+    position: relative;
+}
+
+.title-row h1 {
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .booking-container {
+        margin: 20px;
+    }
+    
+    .booking-form {
+        width: 90%;
+        padding: 20px;
+    }
+}

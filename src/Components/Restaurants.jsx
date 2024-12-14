@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import './Restaurants.css';
+import { useNavigate } from 'react-router-dom';
 
 const RestaurantsComponent = () => {
     const [restaurants, setRestaurants] = useState([]);
@@ -17,6 +18,8 @@ const RestaurantsComponent = () => {
     const locations = ["New Cairo", "Masr El gedida", "Zayed", "Maadi", "Other"];
     const cuisines = ["International", "Italian", "Asian", "Egyptian", "Other"];
     const dietaryOptions = ["Vegetarian", "Lactose", "Other"];
+
+    const navigate = useNavigate();
 
     // Fetch restaurants with search parameters
     const fetchRestaurants = useCallback(async () => {
@@ -155,7 +158,12 @@ const RestaurantsComponent = () => {
                     <p>No restaurants match your criteria.</p>
                 ) : (
                     filteredRestaurants.map((restaurant, index) => (
-                        <div key={index} className="restaurant-card">
+                        <div 
+                            key={index} 
+                            className="restaurant-card"
+                            onClick={() => navigate(`/restaurant/${restaurant.id}`)}
+                            style={{ cursor: 'pointer' }}
+                        >
                             <div className="restaurant-preview">
                                 <img 
                                     src={restaurant.image || 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4'} 

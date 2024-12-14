@@ -8,6 +8,8 @@ import RegistrationForm from './Components/Register';
 import Footer from "./Components/Footer";
 import AddRestaurant from './Components/AddResturant'; 
 import NotFound from './Components/NotFound'; 
+import RestaurantDetails from './Components/RestaurantDetails'; 
+import BookingPage from './Components/BookingPage';
 
 function App() {
   return (
@@ -18,9 +20,11 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/restaurant" element={<Restaurant />} />
+            <Route path="/restaurant/:id" element={<RestaurantDetails />} />
             <Route path="/login" element={<LoginForm />} />
             <Route path="/register" element={<RegistrationForm />} />
             <Route path="/addRestaurant" element={<AddRestaurant />} />
+            <Route path="/booking/:id" element={<BookingPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </div>
