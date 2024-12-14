@@ -22,11 +22,15 @@ const BookingPage = () => {
             .then(data => {
                 console.log('Restaurant data:', data);
                 setRestaurant(data);
-                // Set the restaurant name in the form data
-                setFormData(prev => ({
-                    ...prev,
-                    name: data.name // This is the restaurant name from the database
-                }));
+                if (data && data.name) {
+                    console.log('Setting restaurant name:', data.name);
+                    setFormData(prev => ({
+                        ...prev,
+                        name: data.name
+                    }));
+                } else {
+                    console.error('Restaurant data missing name:', data);
+                }
             })
             .catch(err => {
                 console.error('Error fetching restaurant:', err);
@@ -39,47 +43,74 @@ const BookingPage = () => {
         setError('');
 
         try {
-            const token = localStorage.getItem('token');
+            // Get token from localStorage with correct key
+            const token = localStorage.getItem('authToken');
+            console.log('Token from localStorage:', token);
+
             if (!token) {
+                console.error('No token found');
                 navigate('/login');
                 return;
             }
 
-            // Ensure we have the restaurant name
+            // Format the token
+            const formattedToken = token.startsWith('Bearer ') ? token : `Bearer ${token}`;
+            console.log('Using formatted token:', formattedToken);
+
+            console.log('Current form data:', formData);
+
             if (!formData.name) {
+                console.error('Restaurant name is missing from form data');
                 setError('Restaurant name is missing');
                 return;
             }
 
             const bookingData = {
-                name: formData.name, // This is the restaurant name
+                name: restaurant.name,
                 date: formData.date,
                 time: formData.time,
                 quantity: parseInt(formData.quantity, 10),
                 special_requests: formData.special_requests || ''
             };
 
-            console.log('Sending booking data:', bookingData);
+            console.log('Attempting to book with data:', bookingData);
 
             const response = await fetch('http://127.0.0.1:5005/resturant/book', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
+                    'Authorization': formattedToken,
+                    'Accept': 'application/json'
                 },
+                credentials: 'include',
                 body: JSON.stringify(bookingData)
             });
 
             console.log('Response status:', response.status);
-            const data = await response.text();
-            console.log('Response data:', data);
+            const responseText = await response.text();
+            console.log('Response text:', responseText);
+
+            if (response.status === 401) {
+                // Token is invalid or expired
+                console.error('Token is invalid or expired');
+                localStorage.removeItem('authToken'); // Remove the correct token key
+                navigate('/login');
+                return;
+            }
 
             if (response.ok) {
                 alert('Booking successful!');
                 navigate(`/restaurant/${id}`);
             } else {
-                setError(data || 'Failed to book. Please try again.');
-                console.error('Booking failed:', data);
+                let errorMessage = 'Failed to book. Please try again.';
+                try {
+                    const errorData = JSON.parse(responseText);
+                    errorMessage = errorData.message || errorMessage;
+                } catch (e) {
+                    errorMessage = responseText || errorMessage;
+                }
+                setError(errorMessage);
+                console.error('Booking failed:', errorMessage);
             }
         } catch (error) {
             console.error('Booking error:', error);
@@ -89,7 +120,7 @@ const BookingPage = () => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        console.log('Form field updated:', name, value);
+        console.log('Updating form field:', name, 'with value:', value);
         setFormData(prev => ({
             ...prev,
             [name]: value

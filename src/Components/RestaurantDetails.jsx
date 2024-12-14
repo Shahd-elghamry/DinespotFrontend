@@ -27,6 +27,16 @@ const RestaurantDetails = () => {
             });
     }, [id]);
 
+    const handleBookClick = () => {
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+            alert('Please log in first to book a restaurant');
+            navigate('/login');
+            return;
+        }
+        navigate(`/booking/${id}`);
+    };
+
     if (loading) return <div className="loading">Loading...</div>;
     if (error) return <div className="error">{error}</div>;
     if (!restaurant) return <div className="error">Restaurant not found</div>;
@@ -44,7 +54,7 @@ const RestaurantDetails = () => {
                 <h1 className="restaurant-name">{restaurant.name}</h1>
                 <button 
                     className="book-button"
-                    onClick={() => navigate(`/booking/${id}`)}
+                    onClick={handleBookClick}
                 >
                     Book Restaurant
                 </button>
