@@ -52,7 +52,7 @@
     box-shadow: 0 0 0 2px rgba(0, 31, 63, 0.1);
 }
 
-.users-section, .restaurants-section {
+.users-section, .restaurants-section, .reviews-section {
     background: white;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -204,6 +204,57 @@
 .table-row.editing .cell {
     flex-direction: column;
     align-items: stretch;
+}
+
+.reviews-section {
+    margin-top: 20px;
+    width: 100%;
+}
+
+.reviews-section .table-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 100px 2fr 100px;
+    padding: 15px;
+    border-bottom: 1px solid #e0e0e0;
+    align-items: center;
+}
+
+.reviews-section .table-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr 100px 2fr 100px;
+    padding: 15px;
+    background-color: #f5f5f5;
+    font-weight: bold;
+    border-bottom: 2px solid #ddd;
+}
+
+.reviews-section .rating {
+    display: flex;
+    gap: 2px;
+}
+
+.reviews-section .star-filled {
+    color: #ffd700;
+}
+
+.reviews-section .star-empty {
+    color: #e0e0e0;
+}
+
+.reviews-section .review-text {
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+    max-height: 100px;
+    overflow-y: auto;
+}
+
+.loading-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    font-size: 1.2em;
+    color: #666;
 }
 
 @media (max-width: 768px) {
