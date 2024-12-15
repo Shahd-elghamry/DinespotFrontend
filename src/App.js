@@ -15,6 +15,7 @@ import EditProfile from './Components/EditProfile';
 import Profile from './Components/Profile';
 import FAQ from './Pages/FAQ';
 import ControlPanel from './Components/ControlPanel';
+import MyBookings from './Components/MyBookings';
 import './App.css';
 
 function App() {
@@ -42,6 +43,11 @@ function App() {
               <Route path="/edit-profile" element={
                 <PrivateRoute>
                   <EditProfile />
+                </PrivateRoute>
+              } />
+              <Route path="/bookings" element={
+                <PrivateRoute>
+                  <MyBookings />
                 </PrivateRoute>
               } />
               <Route path="*" element={<NotFound />} />
