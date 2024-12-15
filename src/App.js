@@ -14,6 +14,7 @@ import BookingPage from './Components/BookingPage';
 import EditProfile from './Components/EditProfile';
 import Profile from './Components/Profile';
 import FAQ from './Pages/FAQ';
+import ControlPanel from './Components/ControlPanel';
 import './App.css';
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/restaurant" element={<Restaurant />} />
               <Route path="/restaurant/:id" element={<RestaurantDetails />} />
+              <Route path="/control-panel" element={<ControlPanel />} />
               <Route path="/login" element={<LoginForm />} />
               <Route path="/register" element={<RegistrationForm />} />
               <Route path="/addRestaurant" element={<AddRestaurant />} />
