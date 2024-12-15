@@ -16,6 +16,7 @@ import Profile from './Components/Profile';
 import FAQ from './Pages/FAQ';
 import ControlPanel from './Components/ControlPanel';
 import MyBookings from './Components/MyBookings';
+import Compare from './Components/Compare';
 import './App.css';
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
               <Route path="/register" element={<RegistrationForm />} />
               <Route path="/addRestaurant" element={<AddRestaurant />} />
               <Route path="/booking/:id" element={<BookingPage />} />
+              <Route path="/compare" element={<Compare />} />
               <Route path="/faq" element={<FAQ />} />
               <Route path="/profile" element={
                 <PrivateRoute>

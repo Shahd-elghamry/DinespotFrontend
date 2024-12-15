@@ -8,18 +8,13 @@ const AddRestaurant = () => {
         name: '',
         location: '',
         cuisine: '',
+        maxcapacity: '',
         halal: 'no',
-        dietary: '',
-        image: '',
-        description: ''
+        minHealthRating: '',
+        dietary: ''
     });
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
-
-    // Options for select fields
-    const locations = ["New Cairo", "Masr El gedida", "Zayed", "Maadi", "Other"];
-    const cuisines = ["International", "Italian", "Asian", "Egyptian", "Other"];
-    const dietaryOptions = ["Vegetarian", "Lactose", "Other"];
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -42,7 +37,7 @@ const AddRestaurant = () => {
                 return;
             }
 
-            const response = await fetch('http://127.0.0.1:5005/resturant/add', {
+            const response = await fetch('http://127.0.0.1:5005/addresturant', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -51,7 +46,7 @@ const AddRestaurant = () => {
                 body: JSON.stringify(formData)
             });
 
-            const data = await response.json();
+            const data = await response.text();
 
             if (response.ok) {
                 setSuccess('Restaurant added successfully!');
@@ -59,7 +54,7 @@ const AddRestaurant = () => {
                     navigate('/restaurant');
                 }, 2000);
             } else {
-                setError(data.message || 'Failed to add restaurant');
+                setError(data || 'Failed to add restaurant');
             }
         } catch (error) {
             setError('Error adding restaurant. Please try again.');
@@ -76,7 +71,7 @@ const AddRestaurant = () => {
                 {success && <div className="success-message">{success}</div>}
 
                 <div className="form-group">
-                    <label htmlFor="name">Restaurant Name</label>
+                    <label htmlFor="name">Restaurant Name*</label>
                     <input
                         type="text"
                         id="name"
@@ -88,35 +83,40 @@ const AddRestaurant = () => {
                 </div>
 
                 <div className="form-group">
-                    <label htmlFor="location">Location</label>
-                    <select
+                    <label htmlFor="location">Location*</label>
+                    <input
+                        type="text"
                         id="location"
                         name="location"
                         value={formData.location}
                         onChange={handleChange}
                         required
-                    >
-                        <option value="">Select Location</option>
-                        {locations.map(loc => (
-                            <option key={loc} value={loc}>{loc}</option>
-                        ))}
-                    </select>
+                    />
                 </div>
 
                 <div className="form-group">
-                    <label htmlFor="cuisine">Cuisine Type</label>
-                    <select
+                    <label htmlFor="cuisine">Cuisine Type*</label>
+                    <input
+                        type="text"
                         id="cuisine"
                         name="cuisine"
                         value={formData.cuisine}
                         onChange={handleChange}
                         required
-                    >
-                        <option value="">Select Cuisine</option>
-                        {cuisines.map(cuisine => (
-                            <option key={cuisine} value={cuisine}>{cuisine}</option>
-                        ))}
-                    </select>
+                    />
+                </div>
+
+                <div className="form-group">
+                    <label htmlFor="maxcapacity">Maximum Capacity*</label>
+                    <input
+                        type="number"
+                        id="maxcapacity"
+                        name="maxcapacity"
+                        value={formData.maxcapacity}
+                        onChange={handleChange}
+                        min="1"
+                        required
+                    />
                 </div>
 
                 <div className="form-group">
@@ -126,7 +126,6 @@ const AddRestaurant = () => {
                         name="halal"
                         value={formData.halal}
                         onChange={handleChange}
-                        required
                     >
                         <option value="yes">Yes</option>
                         <option value="no">No</option>
@@ -134,49 +133,31 @@ const AddRestaurant = () => {
                 </div>
 
                 <div className="form-group">
-                    <label htmlFor="dietary">Dietary Options</label>
+                    <label htmlFor="minHealthRating">Minimum Health Rating</label>
                     <select
-                        id="dietary"
-                        name="dietary"
-                        value={formData.dietary}
+                        id="minHealthRating"
+                        name="minHealthRating"
+                        value={formData.minHealthRating}
                         onChange={handleChange}
                     >
-                        <option value="">Select Dietary Option</option>
-                        {dietaryOptions.map(option => (
-                            <option key={option} value={option}>{option}</option>
-                        ))}
+                        <option value="">Select Rating</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
                     </select>
                 </div>
 
                 <div className="form-group">
-                    <label htmlFor="image">Image URL</label>
+                    <label htmlFor="dietary">Dietary Options</label>
                     <input
-                        type="url"
-                        id="image"
-                        name="image"
-                        value={formData.image}
+                        type="text"
+                        id="dietary"
+                        name="dietary"
+                        value={formData.dietary}
                         onChange={handleChange}
-                        placeholder="Enter image URL"
-                    />
-                    {formData.image && (
-                        <img
-                            src={formData.image}
-                            alt="Restaurant preview"
-                            className="image-preview"
-                            onError={(e) => e.target.style.display = 'none'}
-                        />
-                    )}
-                </div>
-
-                <div className="form-group">
-                    <label htmlFor="description">Description</label>
-                    <textarea
-                        id="description"
-                        name="description"
-                        value={formData.description}
-                        onChange={handleChange}
-                        placeholder="Enter restaurant description"
-                        required
+                        placeholder="e.g., Vegetarian, Lactose-free"
                     />
                 </div>
 

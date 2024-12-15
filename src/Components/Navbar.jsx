@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { AuthContext } from '../AuthContext.js';
 import './Navbar.css'; 
 import profileIcon from '../photos/profileIcon.png';
-import { FaUser, FaEdit, FaBookmark, FaUtensils, FaCog, FaSignOutAlt, FaTrashAlt } from 'react-icons/fa';
+import { FaUser, FaEdit, FaBookmark, FaUtensils, FaCog, FaSignOutAlt, FaTrashAlt, FaBalanceScale } from 'react-icons/fa';
 import { MdDashboard } from 'react-icons/md';
 import { IoMdAdd } from 'react-icons/io';
 
@@ -137,6 +137,7 @@ const Navbar = () => {
             <ul className="navbar-lists">
                 <li><Link to="/">Home</Link></li>
                 <li><Link to="/restaurant">Restaurants</Link></li>
+                <li><Link to="/compare"><FaBalanceScale className="nav-icon" /> Compare</Link></li>
                 {canAddRestaurant && (
                     <li><Link to="/AddRestaurant">Add Restaurant</Link></li>
                 )}
