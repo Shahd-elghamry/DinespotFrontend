@@ -1,0 +1,300 @@
+.control-panel {
+    padding: 2rem;
+    margin-top: 60px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.control-panel-header {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.control-panel h1 {
+    color: #001f3f;
+    margin: 0;
+}
+
+.tab-buttons {
+    display: flex;
+    gap: 1rem;
+}
+
+.tab-button {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    background-color: #f8f9fa;
+    color: #001f3f;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.tab-button.active {
+    background-color: #001f3f;
+    color: white;
+}
+
+.search-bar input {
+    padding: 0.5rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 300px;
+    font-size: 1rem;
+}
+
+.search-bar input:focus {
+    outline: none;
+    border-color: #001f3f;
+    box-shadow: 0 0 0 2px rgba(0, 31, 63, 0.1);
+}
+
+.users-section, .restaurants-section, .reviews-section {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+}
+
+.users-section h2 {
+    color: #001f3f;
+    margin-bottom: 1.5rem;
+}
+
+.users-table {
+    width: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.table-header {
+    display: grid;
+    grid-template-columns: 2fr 2fr 1fr 1fr;
+    background: #f8f9fa;
+    padding: 1rem;
+    font-weight: bold;
+    color: #001f3f;
+    border-bottom: 2px solid #001f3f;
+}
+
+.table-row {
+    display: grid;
+    grid-template-columns: 2fr 2fr 1fr 1fr;
+    padding: 1rem;
+    border-bottom: 1px solid #eee;
+    align-items: center;
+}
+
+.table-row:hover {
+    background-color: #f8f9fa;
+}
+
+.cell {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.cell input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.user-icon {
+    color: #001f3f;
+}
+
+.actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.delete-btn, .edit-btn, .save-btn, .cancel-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.delete-btn {
+    background-color: #dc3545;
+    color: white;
+}
+
+.delete-btn:hover {
+    background-color: #c82333;
+}
+
+.edit-btn {
+    background-color: #0056b3;
+    color: white;
+}
+
+.edit-btn:hover {
+    background-color: #004494;
+}
+
+.save-btn {
+    background-color: #28a745;
+    color: white;
+}
+
+.save-btn:hover {
+    background-color: #218838;
+}
+
+.cancel-btn {
+    background-color: #6c757d;
+    color: white;
+}
+
+.cancel-btn:hover {
+    background-color: #5a6268;
+}
+
+.error {
+    color: #dc3545;
+    text-align: center;
+    padding: 1rem;
+    background: #f8d7da;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+.edit-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+.edit-fields input,
+.edit-fields select {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 0.9rem;
+}
+
+.edit-fields select {
+    background-color: white;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.table-row.editing {
+    background-color: #f8f9fa;
+    padding: 1rem;
+}
+
+.table-row.editing .cell {
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.reviews-section {
+    margin-top: 20px;
+    width: 100%;
+}
+
+.reviews-section .table-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 100px 2fr 100px;
+    padding: 15px;
+    border-bottom: 1px solid #e0e0e0;
+    align-items: center;
+}
+
+.reviews-section .table-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr 100px 2fr 100px;
+    padding: 15px;
+    background-color: #f5f5f5;
+    font-weight: bold;
+    border-bottom: 2px solid #ddd;
+}
+
+.reviews-section .rating {
+    display: flex;
+    gap: 2px;
+}
+
+.reviews-section .star-filled {
+    color: #ffd700;
+}
+
+.reviews-section .star-empty {
+    color: #e0e0e0;
+}
+
+.reviews-section .review-text {
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+    max-height: 100px;
+    overflow-y: auto;
+}
+
+.loading-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    font-size: 1.2em;
+    color: #666;
+}
+
+@media (max-width: 768px) {
+    .control-panel {
+        padding: 1rem;
+    }
+
+    .control-panel-header {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .search-bar input {
+        width: 100%;
+    }
+
+    .table-header,
+    .table-row {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .header-cell:nth-child(3),
+    .cell:nth-child(3) {
+        display: none;
+    }
+
+    .actions {
+        flex-direction: column;
+    }
+
+    .edit-fields {
+        width: 100%;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .action-buttons button {
+        width: 100%;
+    }
+}

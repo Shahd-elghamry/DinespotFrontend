@@ -64,10 +64,6 @@ const Navbar = () => {
 
         const commonItems = (
             <>
-                <Link to="/profile" className="menu-item">
-                    <FaUser className="menu-icon" />
-                    <span>My Profile</span>
-                </Link>
                 <Link to="/edit-profile" className="menu-item">
                     <FaEdit className="menu-icon" />
                     <span>Edit Profile</span>
