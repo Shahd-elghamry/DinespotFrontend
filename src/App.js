@@ -12,6 +12,7 @@ import NotFound from './Components/NotFound';
 import RestaurantDetails from './Components/RestaurantDetails'; 
 import BookingPage from './Components/BookingPage';
 import EditProfile from './Components/EditProfile';
+import Profile from './Components/Profile';
 import FAQ from './Pages/FAQ';
 import './App.css';
 
@@ -31,6 +32,11 @@ function App() {
               <Route path="/addRestaurant" element={<AddRestaurant />} />
               <Route path="/booking/:id" element={<BookingPage />} />
               <Route path="/faq" element={<FAQ />} />
+              <Route path="/profile" element={
+                <PrivateRoute>
+                  <Profile />
+                </PrivateRoute>
+              } />
               <Route path="/edit-profile" element={
                 <PrivateRoute>
                   <EditProfile />
