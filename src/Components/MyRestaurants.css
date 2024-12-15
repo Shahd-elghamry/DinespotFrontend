@@ -1,0 +1,148 @@
+.my-restaurants-container {
+    max-width: 1200px;
+    margin: 80px auto 2rem auto;
+    padding: 2rem 1rem;
+    min-height: calc(100vh - 80px);
+}
+
+.loading, .error-message, .no-restaurants {
+    text-align: center;
+    padding: 2rem;
+    font-size: 1.2rem;
+    margin-top: 80px;
+}
+
+.error-message {
+    color: #dc3545;
+}
+
+.success-message {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.restaurant-selector {
+    margin: 2rem 0;
+}
+
+.restaurant-selector select {
+    margin-left: 1rem;
+    padding: 0.5rem;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+}
+
+.restaurant-details {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+}
+
+.restaurant-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin: 1rem 0;
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+}
+
+.bookings-section {
+    margin-top: 2rem;
+}
+
+.bookings-grid {
+    margin-top: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.booking-header {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    background-color: #f8f9fa;
+    padding: 1rem;
+    font-weight: bold;
+    border-bottom: 2px solid #ddd;
+}
+
+.booking-row {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    padding: 1rem;
+    border-bottom: 1px solid #ddd;
+    align-items: center;
+}
+
+.booking-row:hover {
+    background-color: #f8f9fa;
+}
+
+.status {
+    text-transform: capitalize;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    text-align: center;
+    font-weight: 500;
+}
+
+.status.pending {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.status.confirmed {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.status.cancelled {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.booking-actions {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+.accept-btn, .decline-btn {
+    padding: 0.25rem 0.75rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.accept-btn {
+    background-color: #28a745;
+    color: white;
+}
+
+.accept-btn:hover {
+    background-color: #218838;
+}
+
+.decline-btn {
+    background-color: #dc3545;
+    color: white;
+}
+
+.decline-btn:hover {
+    background-color: #c82333;
+}
+
+.no-bookings {
+    text-align: center;
+    padding: 2rem;
+    color: #6c757d;
+}

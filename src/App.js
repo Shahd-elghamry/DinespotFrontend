@@ -16,6 +16,7 @@ import Profile from './Components/Profile';
 import FAQ from './Pages/FAQ';
 import ControlPanel from './Components/ControlPanel';
 import MyBookings from './Components/MyBookings';
+import MyRestaurants from './Components/MyRestaurants';
 import Compare from './Components/Compare';
 import './App.css';
 
@@ -50,6 +51,11 @@ function App() {
               <Route path="/bookings" element={
                 <PrivateRoute>
                   <MyBookings />
+                </PrivateRoute>
+              } />
+              <Route path="/my-restaurants" element={
+                <PrivateRoute>
+                  <MyRestaurants />
                 </PrivateRoute>
               } />
               <Route path="*" element={<NotFound />} />
